@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 Route::get('/dashboard', [EventController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-
+Route::get('/dashboard/create-event', [EventController::class, 'create'])->name('dashboard.create');
 
 
 
