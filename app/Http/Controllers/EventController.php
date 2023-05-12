@@ -38,7 +38,32 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validation
+        $this->validate($request, [
+            'name' => 'required|max:150',
+            'status' => 'nullable|max:50',
+            'number_of_participants' => 'required|max:100',
+            'date_start' => 'nullable|date',
+            'date_end' => 'nullable|date|after_or_equal:date_start',
+            'expected_date_start' => 'nullable|date',
+            'expected_date_end' => 'nullable|date|after_or_equal:expected_date_start',
+            'hours_start' => 'required|date_format:H:i',
+            'hours_end' => 'nullable|date_format:H:i',
+            'organizer_needs' => 'nullable',
+        ], [
+            'name.required' => 'Le champ Nom est obligatoire.',
+            'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
+            'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
+            'date_start.date' => 'Le champ Date de début doit être une date valide.',
+            'date_end.date' => 'Le champ Date de fin doit être une date valide.',
+            'expected_date_start.date' => 'Le champ Date de début attendue doit être une date valide.',
+            'expected_date_end.date' => 'Le champ Date de fin attendue doit être une date valide.',
+            'hours_start.required' => 'Le champ Heure de début est obligatoire.',
+            'hours_start.date_format' => 'Le champ Heure de début doit être au format H:i:s.',
+            'hours_end.date_format' => 'Le champ Heure de fin doit être au format H:i:s.',
+            'hours_end.after' => 'Le champ Heure de fin doit être postérieure à l\'heure de début.',
+        ]);
+        return redirect()->route('dashboard')->with('success', 'Event created successfully');
     }
     /**
      * Display the specified resource.

@@ -18,17 +18,20 @@
 
 
             <label class="mb-3 text-xl" for="name">Intitulé de l'événement :</label>
-            <input class="mb-6 h-8 border-2 border-black" name="name" type="text" value="{{ old('name') }}">
+            @error('name')<span class="text-red-600">{{ $message }}</span>@enderror
+            <input class="mb-6 h-8 border-2 border-black @error('name') is-invalid @enderror" name="name" type="text" value="{{ old('name') }}">
 
 
             <label class="mb-3 text-xl" for="short-desc">Description courte de l'événement :</label>
             <textarea class="mb-6 h-8 border-2 border-black" name="" id="" cols="30" rows="10"></textarea>
 
             <label class="mb-3 text-xl" for="status">Etat d'avancement</label>
-            <select class="mb-6 h-8 border-2 border-black" name="status" id=""></select>
+            @error('status')<span class="text-red-600">{{ $message }}</span>@enderror
+            <select class="mb-6 h-8 border-2 border-black @error('status') is-invalid @enderror" name="status" id=""></select>
 
             <label class="mb-3 text-xl" for="nbre_people">Nombre de personnes présentes estimé</label>
-            <select class="mb-6 h-8 border-2 border-black" name="nbre_people" id=""></select>
+            @error('nbre_people')<span class="text-red-600">{{ $message }}</span>@enderror
+            <select class="mb-6 h-8 border-2 border-black @error('nbre_people') is-invalid @enderror" name="nbre_people" id=""></select>
 
             <label class="mb-3 text-xl" for="condition-date">Connaissez-vous la date précise de l'événement ?</label>
             <div class="flex-row align-center">
@@ -42,25 +45,31 @@
 
             <div id="date" class="hidden">
                 <label class="mb-3 text-xl" for="date-start">Date de début de l'événement :</label>
-                <input class="mb-6 h-8 border-2 border-black" name="date_start" type="date" value="{{ old('date_start') }}"> 
+                @error('date_start')<span class="text-red-600">{{ $message }}</span>@enderror
+                <input class="mb-6 h-8 border-2 border-black @error('date_start') is-invalid @enderror" name="date_start" type="date" value="{{ old('date_start') }}">
 
                 <label class="mb-3 text-xl" for="date-end">Date de fin de l'événement :</label>
-                <input class="mb-6 h-8 border-2 border-black" name="date_end" type="date" value="{{ old('date_end') }}"> 
+                @error('date_end')<span class="text-red-600">{{ $message }}</span>@enderror
+                <input class="mb-6 h-8 border-2 border-black @error('date_end') is-invalid @enderror" name="date_end" type="date" value="{{ old('date_end') }}">
             </div>
             <div id="date_expect" class="hidden">
                 <label class="mb-3 text-xl" for="expected-date-start">Date de début envisagé :</label>
-                <input class="mb-6 h-8 border-2 border-black" name="expected_date_start" type="date" value="{{ old('expected_date_start') }}"> 
+                @error('expected_date_start')<span class="text-red-600">{{ $message }}</span>@enderror
+                <input class="mb-6 h-8 border-2 border-black @error('expected_date_start') is-invalid @enderror" name="expected_date_start" type="date" value="{{ old('expected_date_start') }}">
 
                 <label class="mb-3 text-xl" for="expected-date-end">Date de fin envisagé :</label>
-                <input class="mb-6 h-8 border-2 border-black" name="expected_date_end" type="date" value="{{ old('expected_date_end') }}"> 
+                @error('expected_date_end')<span class="text-red-600">{{ $message }}</span>@enderror
+                <input class="mb-6 h-8 border-2 border-black @error('expected_date_end') is-invalid @enderror" name="expected_date_end" type="date" value="{{ old('expected_date_end') }}">
             </div>
 
 
             <label class="mb-3 text-xl" for="hours-start">Heure de début</label>
-            <input class="mb-6 h-8 border-2 border-black" name="hours_start" type="time" value="{{ old('hours_start') }}"> 
+            @error('hours_start')<span class="text-red-600">{{ $message }}</span>@enderror
+            <input class="mb-6 h-8 border-2 border-black @error('hours_start') is-invalid @enderror" name="hours_start" type="time" value="{{ old('hours_start') }}">
 
             <label class="mb-3 text-xl" for="hours-end">Heure de fin</label>
-            <input class="mb-6 h-8 border-2 border-blackr" name="hours_end" type="time" value="{{ old('hours_end') }}"> 
+            @error('hours_end')<span class="text-red-600">{{ $message }}</span>@enderror
+            <input class="mb-6 h-8 border-2 border-black @error('hours_end') is-invalid @enderror" name="hours_end" type="time" value="{{ old('hours_end') }}">
 
             <label class="mb-3 text-xl" for="needs-organizer">Besoin de l'organisateur</label>
             <textarea class="mb-6 h-8 border-2 border-black" id="" name="needs_organizer" cols="30" rows="10" value="{{ old('needs_organizer') }}"></textarea>
