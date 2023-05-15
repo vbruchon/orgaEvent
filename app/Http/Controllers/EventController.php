@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
-use App\Http\Requests\ContactRequest;
+use App\Models\Structure;
 
 class EventController extends Controller
 {
@@ -15,7 +15,7 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::all();
-        return view('dashboard', ['events' => $events]);
+        return view('event', ['events' => $events]);
     }
 
     /**
@@ -23,7 +23,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('dashboard_create_event');
+        $structures = Structure::all();
+        return view('dashboard_create_event', ['structures' => $structures]);
     }
 
     /**
@@ -38,19 +39,24 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation
-        $this->validate($request, [
-            'name' => 'required|max:150',
-            'status' => 'nullable|max:50',
-            'number_of_participants' => 'required|max:100',
-            'date_start' => 'nullable|date',
-            'date_end' => 'nullable|date|after_or_equal:date_start',
-            'expected_date_start' => 'nullable|date',
-            'expected_date_end' => 'nullable|date|after_or_equal:expected_date_start',
-            'hours_start' => 'required|date_format:H:i',
-            'hours_end' => 'nullable|date_format:H:i',
-            'organizer_needs' => 'nullable',
-        ], [
+        $rules = [
+            'structures_id' => ['required', 'integer', 'exists:structures,id'],
+            'partners_id' => ['required', "string"],
+            'name' => ['required', 'string', 'max:150'],
+            'description' => ['string'],
+            'status' => ['nullable', 'string', 'max:50'],
+            'number_of_participants' => ['required', 'string'],
+            'date_start' => ['nullable', 'date'],
+            'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
+            'expected_date_start' => ['nullable', 'date'],
+            'expected_date_end' => ['nullable', 'date', 'after_or_equal:expected_date_start'],
+            'hours_start' => ['required', 'date_format:H:i'],
+            'hours_end' => ['nullable', 'date_format:H:i', 'after:hours_start'],
+            'organizer_needs' => ['nullable'],
+        ];
+        $validated = $request->validate($rules, [
+            'structures_id.required' => 'Le champs structure doit être définis',
+            'partners_id.required' => 'Le champs structure doit être définis',
             'name.required' => 'Le champ Nom est obligatoire.',
             'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
             'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
@@ -63,6 +69,14 @@ class EventController extends Controller
             'hours_end.date_format' => 'Le champ Heure de fin doit être au format H:i:s.',
             'hours_end.after' => 'Le champ Heure de fin doit être postérieure à l\'heure de début.',
         ]);
+        $event = new Event();
+
+        foreach ($validated as $field => $value) {
+            $event->{$field} = $value;
+        }
+
+        $event->save();
+
         return redirect()->route('dashboard')->with('success', 'Event created successfully');
     }
     /**
