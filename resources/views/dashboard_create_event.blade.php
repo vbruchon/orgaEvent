@@ -9,11 +9,19 @@
 
         <form action="" method="post" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
             @csrf
-            <label class="mb-3 text-xl" for="structure">Structure :</label>
-            <select name="structure" id="" class="mb-6 h-8 border-2 border-black"></select>
+            <label class="mb-3 text-xl" for="structures_id">Structure :</label>
+            <select name="structures_id" id="" class="mb-6 h-8 border-2 border-black">
+                <option value="" disabled selected hidden>Choisissez une structure</option>
+                @if($structures->count() > 0)
+                @foreach($structures as $structure)
+                <option value="{{ $structure->id }}">{{ $structure->name }}</option>
+                @endforeach
+                @endif
+            </select>
 
-            <label class="mb-3 text-xl" for="partners">Partenaires organisateurs :</label>
-            <select name="partners" id="" class="mb-6 h-8 border-2 border-black"></select>
+
+            <label class="mb-3 text-xl" for="partners_id">Partenaires organisateurs :</label>
+            <input name="partners_id" id="" class="mb-6 h-8 border-2 border-black" type="text" value="1">
 
 
 
@@ -22,16 +30,30 @@
             <input class="mb-6 h-8 border-2 border-black @error('name') is-invalid @enderror" name="name" type="text" value="{{ old('name') }}">
 
 
-            <label class="mb-3 text-xl" for="short-desc">Description courte de l'événement :</label>
-            <textarea class="mb-6 h-8 border-2 border-black" name="" id="" cols="30" rows="10"></textarea>
+            <label class="mb-3 text-xl" for="description">Description courte de l'événement :</label>
+            <textarea class="mb-6 h-8 border-2 border-black" name="description" id="" cols="30" rows="10"></textarea>
 
             <label class="mb-3 text-xl" for="status">Etat d'avancement</label>
             @error('status')<span class="text-red-600">{{ $message }}</span>@enderror
-            <select class="mb-6 h-8 border-2 border-black @error('status') is-invalid @enderror" name="status" id=""></select>
+            <select class="mb-6 h-8 border-2 border-black @error('status') is-invalid @enderror" name="status" id="">
+                <option value="" disabled selected hidden>Choisissez un status</option>
+                <option value="en-réfléxion">En réfléxion</option>
+                <option value="en_cours_de_montage">En cours de montage</option>
+                <option value="planifié">Planifié</option>
+                <option value="réalisé">Réalisé</option>
+            </select>
 
-            <label class="mb-3 text-xl" for="nbre_people">Nombre de personnes présentes estimé</label>
+            <label class="mb-3 text-xl" for="number_of_participants">Nombre de personnes présentes estimé</label>
             @error('nbre_people')<span class="text-red-600">{{ $message }}</span>@enderror
-            <select class="mb-6 h-8 border-2 border-black @error('nbre_people') is-invalid @enderror" name="nbre_people" id=""></select>
+            <select class="mb-6 h-8 border-2 border-black @error('nbre_people') is-invalid @enderror" name="number_of_participants" id="">
+                <option value="" disabled selected hidden>Choisissez le nombre de personnes prévus</option>
+                <option value="<50">Moins de 50 personnes</option>
+                <option value="50 - 80">De 50 à 80 personnes</option>
+                <option value="81 - 120">De 81 à 120 personnes</option>
+                <option value="121 - 160">De 120 à 160 personnes</option>
+                <option value="161 - 200">De 160 à 200 personnes</option>
+                <option value=">200">Plus de 200 personnes</option>
+            </select>
 
             <label class="mb-3 text-xl" for="condition-date">Connaissez-vous la date précise de l'événement ?</label>
             <div class="flex-row align-center">
@@ -71,8 +93,8 @@
             @error('hours_end')<span class="text-red-600">{{ $message }}</span>@enderror
             <input class="mb-6 h-8 border-2 border-black @error('hours_end') is-invalid @enderror" name="hours_end" type="time" value="{{ old('hours_end') }}">
 
-            <label class="mb-3 text-xl" for="needs-organizer">Besoin de l'organisateur</label>
-            <textarea class="mb-6 h-8 border-2 border-black" id="" name="needs_organizer" cols="30" rows="10" value="{{ old('needs_organizer') }}"></textarea>
+            <label class="mb-3 text-xl" for="organizer_needs">Besoin de l'organisateur</label>
+            <textarea class="mb-6 h-8 border-2 border-black" id="" name="organizer_needs" cols="30" rows="10">{{ old('needs_organizer') }}</textarea>
 
             <input type="submit" value="Envoyer">
         </form>
