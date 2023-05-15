@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <main class="w-full mt-10">
-        <a href="{{ route('add.event') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900 ">Ajouter un nouvel événement</a>
+        <a href="{{ route('add.event') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
 
         <br>
         <br>
@@ -16,77 +16,77 @@
                 <thead>
                     <tr class="bg-gray-50 border-b">
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 ID
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Structure Organisatrice
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Partenaires Organisateurs
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Intitulé
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Description de l'événement
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Status
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Nombre de participants
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Du
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Au
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Date prévisionnel de début
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Date prévisionnel de fin
                             </div>
                         </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                        <th class="p-2 border-r cursor-pointer text-lg font-thin text-gray-500">
+                            <div class="flex items-center justify-center font-semibold">
                                 De
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 À
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Besoins de l'organisateur
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center font-semibold">
                                 Action
                             </div>
                         </th>
@@ -115,7 +115,7 @@
                         <td class="p-2 border-r">{{$event->organizer_needs}}</td>
                         <td class="p-2 border-r">
                             <div class="flex flex-nowrap space-x-1 ">
-                                <a href="" class="bg-orange-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
+                                <a href="" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
                                     Modifier
                                 </a>
 
