@@ -25,7 +25,7 @@ return new class extends Migration
             $table->time('hours_end')->nullable(true);
             $table->text('organizer_needs')->nullable(true);
             $table->foreignId('structures_id')->nullable(false);
-            $table->foreignId('partners_id')->nullable(false);
+            $table->foreignId('partners_id')->nullable(true);
         });
     }
 
