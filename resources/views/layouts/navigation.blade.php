@@ -18,14 +18,14 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard.create')" :active="request()->routeIs('dashboard.create')">
-                        {{ __('Ajouter un événement') }}
+                    <x-nav-link :href="route('event.list')" :active="request()->routeIs('event.list')">
+                        {{ __('Événements') }}
                     </x-nav-link>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('structure')" :active="request()->routeIs('structure')">
-                        {{ __('Structure') }}
+                        {{ __('Structures') }}
                     </x-nav-link>
                 </div>
 

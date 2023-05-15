@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
-Route::get('/dashboard', [EventController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard')->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -27,8 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/dashboard/create-event', [EventController::class, 'create'])->name('dashboard.create');
-Route::post('/dashboard/create-event', [EventController::class, 'store'])->name('dashboard.store');
+Route::get('/dashboard/create-event', [EventController::class, 'create'])->name('add.event');
+Route::post('/dashboard/create-event', [EventController::class, 'store'])->name('event.store');
+Route::get('/dashboard/events', [EventController::class, 'index'])->name('event.list');
 
 Route::get('/dashboard/structures', [StructureController::class, 'index'])->name('structure');
 Route::get('/dashboard/add-structure', [StructureController::class, 'create'])->name('add.structure');
