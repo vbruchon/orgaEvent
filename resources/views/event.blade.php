@@ -7,10 +7,6 @@
     <main class="w-full mt-10">
         <a href="{{ route('add.event') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
 
-        <br>
-        <br>
-        <br>
-
         <div class="table w-full p-2 mt-8 w-fit">
             <table class="w-full border">
                 <thead>
@@ -100,7 +96,7 @@
                     </tr>
                     <tr class="bg-gray-100 text-center border-b text-l text-gray-600">
                         <td class="p-2 border-r">{{$event->id}}</td>
-                        <td class="p-2 border-r">{{$event->structures_id}}</td>
+                        <td class="p-2 border-r">{{$event->structure->name}}</td>
                         <td class="p-2 border-r">{{$event->partners_id}}</td>
                         <td class="p-2 border-r">{{$event->name}}</td>
                         <td class="p-2 border-r">{{$event->description}}</td>
@@ -115,11 +111,11 @@
                         <td class="p-2 border-r">{{$event->organizer_needs}}</td>
                         <td class="p-2 border-r">
                             <div class="flex flex-nowrap space-x-1 ">
-                                <a href="" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
+                                <a href="{{ route('event.edit', $event->id) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
                                     Modifier
                                 </a>
 
-                                <form method="post" action="">
+                                <form method="post" action="{{ route('event.destroy', $event->id) }}">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="bg-red-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold">
