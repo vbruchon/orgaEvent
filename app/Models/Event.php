@@ -18,7 +18,7 @@ class Event extends Model
 
     public function structure()
     {
-        return $this->belongsTo(Structure::class);
+        return $this->belongsTo(Structure::class, 'structures_id');
     }
 
     public function partners()
