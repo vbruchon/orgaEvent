@@ -13,8 +13,8 @@
                     <p>Ici, vous pouvez :</p>
                     <div class="flex flex-col">
                         <a href="{{ route('event.list') }}" class="w-80 ml-5 mb-3 text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900">Consulter les événements</a>
-                        <a href="{{ route('add.event') }}" class="w-80 ml-5 mb-3 text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un événement</a>
-                        <a href="{{ route('structure') }}" class="w-80 ml-5 mb-3 text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900">Consulter les structure</a>
+                        <a href="{{ route('event.create') }}" class="w-80 ml-5 mb-3 text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un événement</a>
+                        <a href="{{ route('structure.list') }}" class="w-80 ml-5 mb-3 text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900">Consulter les structure</a>
                     </div>
                 </div>
             </div>

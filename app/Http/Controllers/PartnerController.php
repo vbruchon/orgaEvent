@@ -45,7 +45,7 @@ class PartnerController extends Controller
         $partner->name = $rules['name'];
         $partner->save();
 
-        return redirect()->route('partners.list')->with('success', 'Le partenaire a été ajouté avec succès !');
+        return redirect()->route('partner.list')->with('success', 'Le partenaire a été ajouté avec succès !');
     }
 
     /**
@@ -71,7 +71,7 @@ class PartnerController extends Controller
     {
         $this->store($partner, $request);
 
-        return redirect()->route('partners.list')->with('success', 'Le partenaire a été modifié avec succès !');
+        return redirect()->route('partner.list')->with('success', 'Le partenaire a été modifié avec succès !');
     }
 
     /**
@@ -80,6 +80,6 @@ class PartnerController extends Controller
     public function destroy(Partner $partner)
     {
         $partner->delete();
-        return redirect()->route('partners.list')->with('success', 'Le partenaire a été supprimé avec succès !');
+        return redirect()->route('partner.list')->with('success', 'Le partenaire a été supprimé avec succès !');
     }
 }

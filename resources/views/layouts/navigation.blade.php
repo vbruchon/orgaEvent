@@ -24,12 +24,12 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('structure')" :active="request()->routeIs('structure')">
+                    <x-nav-link :href="route('structure.list')" :active="request()->routeIs('structure')">
                         {{ __('Structures') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('partners.list')" :active="request()->routeIs('partners.list')">
+                    <x-nav-link :href="route('partner.list')" :active="request()->routeIs('partners.list')">
                         {{ __('Partenaires') }}
                     </x-nav-link>
                 </div>

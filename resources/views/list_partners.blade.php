@@ -11,7 +11,7 @@
         </div>
         @endif
         <main class="w-full mt-10">
-            <a href="{{ route('create.partner') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouveau partenaire</a>
+            <a href="{{ route('partner.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouveau partenaire</a>
             <div class="table w-full p-2 mt-8">
                 @if($partners->count() === 0)
 

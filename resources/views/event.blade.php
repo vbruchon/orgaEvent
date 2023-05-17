@@ -12,7 +12,7 @@
     <main class="w-full mt-10">
 
 
-        <a href="{{ route('add.event') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
+        <a href="{{ route('event.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
 
         <div class="table w-full p-2 mt-8 w-fit">
             <table class="w-full border">
@@ -122,7 +122,7 @@
                                     Modifier
                                 </a>
 
-                                <form method="post" action="{{ route('event.destroy', $event->id) }}">
+                                <form method="post" action="{{ route('event.delete', $event->id) }}">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="bg-red-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold">

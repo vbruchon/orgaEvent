@@ -32,33 +32,47 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/dashboard/create-event', [EventController::class, 'create'])->name('add.event');
-Route::post('/dashboard/create-event', [EventController::class, 'store'])->name('event.store');
-Route::get('/dashboard/events', [EventController::class, 'index'])->name('event.list');
-Route::get('dashboard/events/{event}', [EventController::class, 'edit'])->name('event.edit');
-Route::put('dashboard/events/{event}', [EventController::class, 'update'])->name('event.update');
-Route::delete('dashboard/events/{event}/delete', [EventController::class, 'destroy'])->name('event.destroy');
+Route::prefix('/dashboard')->group(function () {
+    Route::prefix('events')->name('event.')->group(function () {
+        Route::get('/', [EventController::class, 'index'])->name('list');
+        Route::get('/create', [EventController::class, 'create'])->name('create');
+        Route::post('/add', [EventController::class, 'store'])->name('add');
+        Route::get('/{event}', [EventController::class, 'edit'])->name('edit');
+        Route::put('/{event}', [EventController::class, 'update'])->name('update');
+        Route::delete('/{event}/delete', [EventController::class, 'destroy'])->name('delete');
+    });
+    Route::prefix('structures')->name('structure.')->group(function () {
+        Route::get('/', [StructureController::class, 'index'])->name('list');
+        Route::get('/create', [StructureController::class, 'create'])->name('create');
+        Route::post('/add', [StructureController::class, 'store'])->name('store');
+        Route::get('/{structure}', [StructureController::class, 'edit'])->name('edit');
+        Route::put('/{structure}', [StructureController::class, 'update'])->name('update');
+        Route::delete('/{structure}', [StructureController::class, 'destroy'])->name('delete');
+    });
+    Route::prefix('partners')->name('partner.')->group(function () {
+        Route::get('/partners', [PartnerController::class, 'index'])->name('list');
+        Route::get('/create', [PartnerController::class, 'create'])->name('create');
+        Route::post('/add', [PartnerController::class, 'store'])->name('store');
+        Route::get('/{partner}', [PartnerController::class, 'edit'])->name('edit');
+        Route::put('/{partner}', [PartnerController::class, 'update'])->name('update');
+        Route::delete('/{partner}/delete', [PartnerController::class, 'destroy'])->name('delete');
+    });
+    Route::prefix('status')->name('status.')->group(function () {
+        Route::get('/', [StatusController::class, 'index'])->name('list');
+        Route::get('/create', [StatusController::class, 'create'])->name('create');
+        Route::post('/create', [StatusController::class, 'store'])->name('store');
+        Route::get('/{status}', [StatusController::class, 'edit'])->name('edit');
+        Route::put('/{status}', [StatusController::class, 'update'])->name('update');
+        Route::delete('/{status}/delete', [StatusController::class, 'destroy'])->name('delete');
+    });
+});
 
-Route::get('/dashboard/structures', [StructureController::class, 'index'])->name('structure');
-Route::get('/dashboard/add-structure', [StructureController::class, 'create'])->name('add.structure');
-Route::post('/dashboard/add-structure', [StructureController::class, 'store'])->name('check.structure');
-Route::get('dashboard/strucutures/{structure}', [StructureController::class, 'edit'])->name('structure.edit');
-Route::put('dashboard/strucutures/{structure}', [StructureController::class, 'update'])->name('structure.update');
-Route::delete('/dashboard/structures/{structure}/delete', [StructureController::class, 'destroy'])->name('structure.delete');
 
-Route::get('/dashboard/partners', [PartnerController::class, 'index'])->name('partners.list');
-Route::get('/dashboard/partners/create', [PartnerController::class, 'create'])->name('create.partner');
-Route::post('/dashboard/partners/add', [PartnerController::class, 'store'])->name('partner.store');
-Route::get('/dashboard/partners/{partner}', [PartnerController::class, 'edit'])->name('partner.edit');
-Route::put('/dashboard/partners/{partner}', [PartnerController::class, 'update'])->name('partner.update');
-Route::delete('/dashboard/partners/{partner}/delete', [PartnerController::class, 'destroy'])->name('partner.delete');
 
-Route::get('/dashboard/status/', [StatusController::class, 'index'])->name('status.list');
-Route::get('/dashboard/status/create', [StatusController::class, 'create'])->name('status.create');
-Route::post('/dashboard/status/create', [StatusController::class, 'store'])->name('status.store');
-Route::get('/dashboard/status/{status}', [StatusController::class, 'edit'])->name('status.edit');
-Route::put('/dashboard/status/{status}', [StatusController::class, 'update'])->name('status.update');
-Route::delete('/dashboard/status/{status}/delete', [StatusController::class, 'destroy'])->name('status.delete');
+
+
+
+
 
 
 
