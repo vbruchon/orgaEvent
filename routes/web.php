@@ -47,7 +47,8 @@ Route::put('dashboard/strucutures/{structure}', [StructureController::class, 'up
 Route::delete('/dashboard/structures/{structure}/delete', [StructureController::class, 'destroy'])->name('structure.delete');
 
 Route::get('/dashboard/partners', [PartnerController::class, 'index'])->name('partners.list');
-
+Route::get('/dashboard/partners/create', [PartnerController::class, 'create'])->name('create.partner');
+Route::post('/dashboard/partners/add', [PartnerController::class, 'store'])->name('partner.store');
 
 
 

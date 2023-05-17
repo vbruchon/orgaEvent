@@ -23,13 +23,30 @@ class PartnerController extends Controller
      */
     public function create()
     {
-        //
+        return view('create_partner');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    
+    public function store(Partner $partner ,Request $request)
+    {
+        // Validation
+        $rules = $request->validate(
+            [
+                'name' => 'required|max:150',
+            ],
+            [
+                'name.required' => 'Le champ Nom est obligatoire.',
+                'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
+            ]
+        );
+
+        $partner->name = $rules['name'];
+        $partner->save();
+
+        return redirect()->route('partners.list')->with('success', 'Le parteniare à été ajouté avec succès !');
+    }
 
     /**
      * Display the specified resource.
