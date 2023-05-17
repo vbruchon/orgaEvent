@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\StructureController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +44,14 @@ Route::get('/dashboard/add-structure', [StructureController::class, 'create'])->
 Route::post('/dashboard/add-structure', [StructureController::class, 'store'])->name('check.structure');
 Route::get('dashboard/strucutures/{structure}', [StructureController::class, 'edit'])->name('structure.edit');
 Route::put('dashboard/strucutures/{structure}', [StructureController::class, 'update'])->name('structure.update');
-
 Route::delete('/dashboard/structures/{structure}/delete', [StructureController::class, 'destroy'])->name('structure.delete');
+
+Route::get('/dashboard/partners', [PartnerController::class, 'index'])->name('partners.list');
+
+
+
+
+
 
 
 
