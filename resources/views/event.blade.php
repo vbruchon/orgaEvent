@@ -4,7 +4,14 @@
             {{ __('Liste des événements') }}
         </h2>
     </x-slot>
+    @if (session('success'))
+    <div id="success-message" class="bg-green-400 p-6 text-center rounded shadow animate-movedown">
+        {{ session('success') }}
+    </div>
+    @endif
     <main class="w-full mt-10">
+
+
         <a href="{{ route('add.event') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
 
         <div class="table w-full p-2 mt-8 w-fit">
@@ -111,7 +118,7 @@
                         <td class="p-2 border-r">{{$event->organizer_needs}}</td>
                         <td class="p-2 border-r">
                             <div class="flex flex-nowrap space-x-1 ">
-                                <a href="{{ route('event.edit', $event->id) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
+                                <a href="{{ route('event.edit', $event) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
                                     Modifier
                                 </a>
 
@@ -130,6 +137,12 @@
 
             </table>
         </div>
+        <script>
+            let sucessMessage = document.getElementById('success-message');
 
+            setTimeout(() => {
+                sucessMessage.classList.add('hidden');
+            }, 5000);
+        </script>
     </main>
 </x-app-layout>

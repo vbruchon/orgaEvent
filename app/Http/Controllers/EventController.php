@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Structure;
+use Illuminate\Validation\ValidationException;
 
 class EventController extends Controller
 {
@@ -90,9 +91,11 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Event $event)
+    public function edit(Event $event, Structure $structures)
     {
-        //
+        $structures = Structure::all();
+
+        return view('event_edit', ['event' => $event, 'structures' => $structures]);
     }
 
     /**
@@ -100,17 +103,57 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        // 
+        $rules = [
+            'structures_id' => ['required', 'integer', 'exists:structures,id'],
+            'partners_id' => ['required', "string"],
+            'name' => ['required', 'string', 'max:150'],
+            'description' => ['required', 'string'],
+            'status' => ['nullable', 'string', 'max:50'],
+            'number_of_participants' => ['required', 'string'],
+            'date_start' => ['nullable', 'date'],
+            'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
+            'expected_date_start' => ['nullable', 'date'],
+            'expected_date_end' => ['nullable', 'date', 'after_or_equal:expected_date_start'],
+            'hours_start' => ['required'],
+            'hours_end' => ['nullable', 'after:hours_start'],
+            'organizer_needs' => ['nullable'],
+        ];
+        try {
+            $validated = $request->validate($rules, [
+                'structures_id.required' => 'Le champs structure doit être définis',
+                'partners_id.required' => 'Le champs structure doit être définis',
+                'name.required' => 'Le champ Nom est obligatoire.',
+                'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
+                'description.required' => 'Le champ Description est obligatoire.',
+                'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
+                'date_start.date' => 'Le champ Date de début doit être une date valide.',
+                'date_end.date' => 'Le champ Date de fin doit être une date valide.',
+                'expected_date_start.date' => 'Le champ Date de début attendue doit être une date valide.',
+                'expected_date_end.date' => 'Le champ Date de fin attendue doit être une date valide.',
+                'hours_start.required' => 'Le champ Heure de début est obligatoire.',
+                'hours_start.date_format' => 'Le champ Heure de début doit être au format H:i:s.',
+                'hours_end.date_format' => 'Le champ Heure de fin doit être au format H:i:s.',
+                'hours_end.after' => 'Le champ Heure de fin doit être postérieure à l\'heure de début.',
+            ]);
+            foreach ($validated as $field => $value) {
+                $event->{$field} = $value;
+            }
+            $event->save();
+
+            return redirect()->route('event.list')->with('success', 'Event created successfully');
+
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($event)
+    public function destroy(Event $event)
     {
-        $event = Event::findOrFail($event);
         $event->delete();
 
-        return redirect()->back()->with('message', "L'événement a bien été supprimé");
+        return redirect()->route('event.list')->with('message', "L'événement a bien été supprimé");
     }
 }
