@@ -29,7 +29,7 @@ class PartnerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Partner $partner ,Request $request)
+    public function store(Partner $partner, Request $request)
     {
         // Validation
         $rules = $request->validate(
@@ -45,7 +45,7 @@ class PartnerController extends Controller
         $partner->name = $rules['name'];
         $partner->save();
 
-        return redirect()->route('partners.list')->with('success', 'Le parteniare à été ajouté avec succès !');
+        return redirect()->route('partners.list')->with('success', 'Le partenaire a été ajouté avec succès !');
     }
 
     /**
@@ -59,24 +59,27 @@ class PartnerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Partner $partners)
+    public function edit(Partner $partner)
     {
-        //
+        return view('partner_edit', ['partner' => $partner]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Partner $partners)
+    public function update(Request $request, Partner $partner)
     {
-        //
+        $this->store($partner, $request);
+
+        return redirect()->route('partners.list')->with('success', 'Le partenaire a été modifié avec succès !');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Partner $partners)
+    public function destroy(Partner $partner)
     {
-        //
+        $partner->delete();
+        return redirect()->route('partners.list')->with('success', 'Le partenaire a été supprimé avec succès !');
     }
 }

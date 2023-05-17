@@ -50,6 +50,12 @@ Route::get('/dashboard/partners', [PartnerController::class, 'index'])->name('pa
 Route::get('/dashboard/partners/create', [PartnerController::class, 'create'])->name('create.partner');
 Route::post('/dashboard/partners/add', [PartnerController::class, 'store'])->name('partner.store');
 
+Route::get('/dashboard/partners/{partner}', [PartnerController::class, 'edit'])->name('partner.edit');
+Route::put('/dashboard/partners/{partner}', [PartnerController::class, 'update'])->name('partner.update');
+Route::delete('/dashboard/partners/{partner}/delete', [PartnerController::class, 'destroy'])->name('partner.delete');
+
+
+
 
 
 
