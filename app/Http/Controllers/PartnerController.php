@@ -15,7 +15,7 @@ class PartnerController extends Controller
     {
         $partners = Partner::all();
 
-        return view('list_partners', ['partners' => $partners]);
+        return view('partner.list', ['partners' => $partners]);
     }
 
     /**
@@ -23,7 +23,7 @@ class PartnerController extends Controller
      */
     public function create()
     {
-        return view('create_partner');
+        return view('partner.createForm');
     }
 
     /**
@@ -61,7 +61,7 @@ class PartnerController extends Controller
      */
     public function edit(Partner $partner)
     {
-        return view('partner_edit', ['partner' => $partner]);
+        return view('partner.editForm', ['partner' => $partner]);
     }
 
     /**

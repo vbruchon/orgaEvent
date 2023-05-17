@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Liste des statuss') }}
+            {{ __('Liste des status') }}
         </h2>
     </x-slot>
     <main class="w-full mt-8">

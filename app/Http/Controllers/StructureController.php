@@ -13,7 +13,7 @@ class StructureController extends Controller
     public function index()
     {
         $structures = Structure::all();
-        return view('structure', ['structures' => $structures]);
+        return view('structure.list', ['structures' => $structures]);
     }
 
     /**
@@ -21,7 +21,7 @@ class StructureController extends Controller
      */
     public function create()
     {
-        return view('add_structure');
+        return view('structure.createForm');
     }
 
     /**
@@ -59,7 +59,7 @@ class StructureController extends Controller
      */
     public function edit(Structure $structure)
     {
-        return view('structure_edit', ['structure' => $structure]);
+        return view('structure.editForm', ['structure' => $structure]);
     }
 
     /**

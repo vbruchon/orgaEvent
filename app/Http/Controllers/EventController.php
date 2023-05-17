@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::all();
-        return view('event', ['events' => $events]);
+        return view('event.list', ['events' => $events]);
     }
 
     /**
@@ -25,7 +25,7 @@ class EventController extends Controller
     public function create()
     {
         $structures = Structure::all();
-        return view('dashboard_create_event', ['structures' => $structures]);
+        return view('event.createForm', ['structures' => $structures]);
     }
 
     /**
@@ -95,7 +95,7 @@ class EventController extends Controller
     {
         $structures = Structure::all();
 
-        return view('event_edit', ['event' => $event, 'structures' => $structures]);
+        return view('event.editForm', ['event' => $event, 'structures' => $structures]);
     }
 
     /**

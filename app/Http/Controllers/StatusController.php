@@ -15,7 +15,7 @@ class StatusController extends Controller
     {
         $status = Status::all();
 
-        return view('status', ['status' => $status]);
+        return view('status.list', ['status' => $status]);
     }
 
     /**
@@ -23,7 +23,7 @@ class StatusController extends Controller
      */
     public function create()
     {
-        return view('create_status');
+        return view('status.createForm');
     }
 
     /**
@@ -61,7 +61,7 @@ class StatusController extends Controller
      */
     public function edit(Status $status)
     {
-        return view('status_edit', ['status' => $status]);
+        return view('status.editForm', ['status' => $status]);
     }
 
     /**
