@@ -59,7 +59,7 @@ class StructureController extends Controller
      */
     public function edit(Structure $structure)
     {
-        //
+        return view('structure_edit', ['structure' => $structure]);
     }
 
     /**
@@ -67,7 +67,21 @@ class StructureController extends Controller
      */
     public function update(Request $request, Structure $structure)
     {
-        //
+        // Validation
+        $rules = $request->validate(
+            [
+                'name' => 'required|max:150',
+            ],
+            [
+                'name.required' => 'Le champ Nom est obligatoire.',
+                'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
+            ]
+        );
+
+        $structure->name = $rules['name'];
+        $structure->save();
+
+        return redirect()->route('structure')->with('success', 'Structure modifiée avec succès !');
     }
 
     /**

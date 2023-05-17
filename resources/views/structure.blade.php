@@ -39,7 +39,7 @@
                         <td class="p-2 border-r">{{$structure->name}}</td>
                         <td class="p-2 border-r">
                             <div class="flex space-x-1 justify-center">
-                                <a href="" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
+                                <a href="{{ route('structure.edit', $structure)}}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
                                     Modifier
                                 </a>
 
