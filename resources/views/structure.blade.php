@@ -43,7 +43,7 @@
                                     Modifier
                                 </a>
 
-                                <form method="post" action="">
+                                <form method="post" action="{{ route('structure.delete', ['structure' => $structure->id]) }}">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="bg-red-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold">

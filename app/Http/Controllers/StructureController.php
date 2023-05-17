@@ -30,13 +30,15 @@ class StructureController extends Controller
     public function store(Structure $structure, Request $request)
     {
         // Validation
-        $rules = $request->validate([
-            'name' => 'required|max:150',
-        ],
-        [
-            'name.required' => 'Le champ Nom est obligatoire.',
-            'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
-        ]);
+        $rules = $request->validate(
+            [
+                'name' => 'required|max:150',
+            ],
+            [
+                'name.required' => 'Le champ Nom est obligatoire.',
+                'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
+            ]
+        );
 
         $structure->name = $rules['name'];
         $structure->save();
@@ -47,7 +49,7 @@ class StructureController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Structure $structures)
+    public function show(Structure $structure)
     {
         //
     }
@@ -55,7 +57,7 @@ class StructureController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Structure $structures)
+    public function edit(Structure $structure)
     {
         //
     }
@@ -63,7 +65,7 @@ class StructureController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Structure $structures)
+    public function update(Request $request, Structure $structure)
     {
         //
     }
@@ -71,8 +73,10 @@ class StructureController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Structure $structures)
+    public function destroy(Structure $structure)
     {
-        //
+        $structure->delete();
+
+        return redirect()->route('structure')->with('sucess', 'La structure à bien était supprimée');
     }
 }
