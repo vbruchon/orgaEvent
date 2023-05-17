@@ -28,13 +28,17 @@
                         {{ __('Structures') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('partners.list')" :active="request()->routeIs('partners.list')">
+                        {{ __('Partenaires') }}
+                    </x-nav-link>
+                </div>
 
-
-
-
-
-
-
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('status.list')" :active="request()->routeIs('status.list')">
+                        {{ __('Status') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

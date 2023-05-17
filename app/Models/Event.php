@@ -23,6 +23,11 @@ class Event extends Model
 
     public function partners()
     {
-        return $this->belongsToMany(Partners::class, 'event-partner');
+        return $this->belongsToMany(Partners::class, 'partners_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
     }
 }
