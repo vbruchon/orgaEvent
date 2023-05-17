@@ -14,8 +14,21 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            animation: {
+                movedown: 'movedown 2s',
+            },
+            keyframes: {
+                movedown: {
+                    '0%': {
+                        transform: 'translateY(-100%)',
+                    },
+                    '40%': {
+                        transform: 'translateY(calc(40%))'
+                    }
+                }
+            },
         },
-    },
 
-    plugins: [forms],
+        plugins: [forms]
+    }
 };
