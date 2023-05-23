@@ -20,6 +20,7 @@ class EventFactory extends Factory
     {
         return [
             'name' => $this->faker->sentence,
+            'partners' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'status' => $this->faker->randomElement(['pending', 'approved', 'cancelled']),
             'number_of_participants' => $this->faker->numberBetween(1, 100),
@@ -31,7 +32,6 @@ class EventFactory extends Factory
             'hours_end' => $this->faker->time(),
             'organizer_needs' => $this->faker->text,
             'structures_id' => Structure::pluck('id')->random(),
-            'partners_id' => Partner::pluck('id')->random(),
         ];
     }
 }

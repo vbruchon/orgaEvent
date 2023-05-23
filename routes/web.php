@@ -40,6 +40,7 @@ Route::prefix('/dashboard')->group(function () {
         Route::put('/{event}/update', [EventController::class, 'update'])->name('update');
         Route::delete('/{event}/delete', [EventController::class, 'destroy'])->name('delete');
     });
+    
     Route::prefix('structures')->name('structure.')->group(function () {
         Route::get('/', [StructureController::class, 'index'])->name('list');
         Route::get('/create', [StructureController::class, 'create'])->name('create');
@@ -48,14 +49,7 @@ Route::prefix('/dashboard')->group(function () {
         Route::put('/{structure}/update', [StructureController::class, 'update'])->name('update');
         Route::delete('/{structure}', [StructureController::class, 'destroy'])->name('delete');
     });
-    Route::prefix('partners')->name('partner.')->group(function () {
-        Route::get('/partners', [PartnerController::class, 'index'])->name('list');
-        Route::get('/create', [PartnerController::class, 'create'])->name('create');
-        Route::post('/add', [PartnerController::class, 'store'])->name('store');
-        Route::get('/{partner}', [PartnerController::class, 'edit'])->name('edit');
-        Route::put('/{partner}/update', [PartnerController::class, 'update'])->name('update');
-        Route::delete('/{partner}/delete', [PartnerController::class, 'destroy'])->name('delete');
-    });
+
     Route::prefix('status')->name('status.')->group(function () {
         Route::get('/', [StatusController::class, 'index'])->name('list');
         Route::get('/create', [StatusController::class, 'create'])->name('create');

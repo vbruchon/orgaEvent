@@ -42,7 +42,7 @@ class EventController extends Controller
     {
         $rules = [
             'structures_id' => ['required', 'integer', 'exists:structures,id'],
-            'partners_id' => ['required', "string"],
+            'partners' => ['required', "string"],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['string'],
             'status' => ['nullable', 'string', 'max:50'],
@@ -57,7 +57,7 @@ class EventController extends Controller
         ];
         $validated = $request->validate($rules, [
             'structures_id.required' => 'Le champs structure doit être définis',
-            'partners_id.required' => 'Le champs structure doit être définis',
+            'partners.required' => 'Le champs structure doit être définis',
             'name.required' => 'Le champ Nom est obligatoire.',
             'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
             'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
@@ -105,7 +105,7 @@ class EventController extends Controller
     {
         $rules = [
             'structures_id' => ['required', 'integer', 'exists:structures,id'],
-            'partners_id' => ['required', "string"],
+            'partners' => ['required', "string"],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['required', 'string'],
             'status' => ['nullable', 'string', 'max:50'],
@@ -121,7 +121,7 @@ class EventController extends Controller
         try {
             $validated = $request->validate($rules, [
                 'structures_id.required' => 'Le champs structure doit être définis',
-                'partners_id.required' => 'Le champs structure doit être définis',
+                'partners.required' => 'Le champs structure doit être définis',
                 'name.required' => 'Le champ Nom est obligatoire.',
                 'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
                 'description.required' => 'Le champ Description est obligatoire.',

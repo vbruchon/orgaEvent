@@ -21,11 +21,6 @@ class Event extends Model
         return $this->belongsTo(Structure::class, 'structures_id');
     }
 
-    public function partners()
-    {
-        return $this->belongsToMany(Partners::class, 'partners_id');
-    }
-
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
