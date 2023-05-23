@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController,
     App\Http\Controllers\PartnerController,
     App\Http\Controllers\StatusController,
     App\Http\Controllers\StructureController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,6 +59,14 @@ Route::prefix('/dashboard')->group(function () {
         Route::put('/{status}/update', [StatusController::class, 'update'])->name('update');
         Route::delete('/{status}/delete', [StatusController::class, 'destroy'])->name('delete');
     });
+
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/users', [UserController::class, "index"])->name('list');
+        Route::get('/{user}', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{user}/update', [UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('delete');
+    });
+    
 });
 
 require __DIR__ . '/auth.php';
