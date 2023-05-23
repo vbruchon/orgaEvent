@@ -12,20 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id()->nullable(false);
-            $table->string('name', 150)->nullable(false);
-            $table->text('description', 150)->nullable(false);
-            $table->string('status', 50)->nullable(true);
-            $table->string('number_of_participants', 100)->nullable(false);
-            $table->date('date_start')->nullable(true);
-            $table->date('date_end')->nullable(true);
-            $table->date('expected_date_start')->nullable(true);
-            $table->date('expected_date_end')->nullable(true);
-            $table->time('hours_start')->nullable(false);
-            $table->time('hours_end')->nullable(true);
-            $table->text('organizer_needs')->nullable(true);
-            $table->foreignId('structures_id')->nullable(false);
-            $table->foreignId('partners_id')->nullable(true);
+            $table->id();
+            $table->string('name', 150);
+            $table->string('partners', 400)->nullable();
+            $table->text('description', 150);
+            $table->string('number_of_participants', 100);
+            $table->string('location', 200)->nullable();
+
+            $table->date('date_start');
+            $table->date('date_end')->nullable();
+            $table->time('hours')->nullable();
+            $table->text('organizer_needs')->nullable();
+
+            $table->foreignId('structure_id');
+            $table->foreignId('status_id');
+            $table->foreignId('user_id');
         });
     }
 

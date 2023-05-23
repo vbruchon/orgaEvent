@@ -16,8 +16,7 @@ class StatusSeeder extends Seeder
         $status = [
             ['name' => 'En réfléxion'],
             ['name' => 'En cours de montage'],
-            ['name' => 'Planifié'],
-            ['name' => 'Réalisé']
+            ['name' => 'Planifié']
         ];
         foreach($status as $s){
             Status::create($s);
