@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\NumberOfParticipantsController;
 use App\Http\Controllers\ProfileController,
     App\Http\Controllers\EventController,
     App\Http\Controllers\PartnerController,
     App\Http\Controllers\StatusController,
     App\Http\Controllers\StructureController;
 use App\Http\Controllers\UserController;
+use App\Models\NumberOfParticipants;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,6 +67,15 @@ Route::prefix('/dashboard')->group(function () {
         Route::get('/{user}', [UserController::class, 'edit'])->name('edit');
         Route::put('/{user}/update', [UserController::class, 'update'])->name('update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('delete');
+    });
+
+    Route::prefix('numberOfParticipants')->name('numberOfParticipants.')->group(function () {
+        Route::get('/', [NumberOfParticipantsController::class, 'index'])->name('list');
+        Route::get('/create', [NumberOfParticipantsController::class, 'create'])->name('create');
+        Route::post('/create', [NumberOfParticipantsController::class, 'store'])->name('store');
+        Route::get('/{numberOfParticipant}', [NumberOfParticipantsController::class, 'edit'])->name('edit');
+        Route::put('/{numberOfParticipant}/update', [NumberOfParticipantsController::class, 'update'])->name('update');
+        Route::delete('/{numberOfParticipant}/delete', [NumberOfParticipantsController::class, 'destroy'])->name('delete');
     });
     
 });
