@@ -53,6 +53,7 @@ class EventController extends Controller
             'description' => ['string'],
             'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
             'number_of_participants_id' => ['required', 'string'],
+            'location' => ['nullable', 'string'],
             'date_start' => ['required', 'date'],
             'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
             'hours' => ['required', 'string'],
