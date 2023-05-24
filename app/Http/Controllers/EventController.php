@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\NumberOfParticipants;
+use App\Models\Status;
 use App\Models\Structure;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class EventController extends Controller
@@ -25,7 +28,10 @@ class EventController extends Controller
     public function create()
     {
         $structures = Structure::all();
-        return view('event.createForm', ['structures' => $structures]);
+        $status = Status::all();
+        $numberOfParticipants = NumberOfParticipants::all();
+        $user = Auth::user();
+        return view('event.createForm', ['structures' => $structures, 'status' => $status, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
     }
 
     /**
@@ -41,34 +47,28 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'structures_id' => ['required', 'integer', 'exists:structures,id'],
+            'structure_id' => ['required', 'integer', 'exists:structures,id'],
             'partners' => ['required', "string"],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['string'],
-            'status' => ['nullable', 'string', 'max:50'],
-            'number_of_participants' => ['required', 'string'],
-            'date_start' => ['nullable', 'date'],
+            'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
+            'number_of_participants_id' => ['required', 'string'],
+            'date_start' => ['required', 'date'],
             'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
-            'expected_date_start' => ['nullable', 'date'],
-            'expected_date_end' => ['nullable', 'date', 'after_or_equal:expected_date_start'],
-            'hours_start' => ['required', 'date_format:H:i'],
-            'hours_end' => ['nullable', 'date_format:H:i', 'after:hours_start'],
+            'hours' => ['required', 'string'],
             'organizer_needs' => ['nullable'],
         ];
         $validated = $request->validate($rules, [
-            'structures_id.required' => 'Le champs structure doit être définis',
+            'structure_id.required' => 'Le champs structure doit être définis',
+            'status_id.required' => 'Le champs status doit être définis',
             'partners.required' => 'Le champs structure doit être définis',
             'name.required' => 'Le champ Nom est obligatoire.',
             'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
             'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
+            'date_start.required' => 'Le champ Date  de début est obligatoire.',
             'date_start.date' => 'Le champ Date de début doit être une date valide.',
             'date_end.date' => 'Le champ Date de fin doit être une date valide.',
-            'expected_date_start.date' => 'Le champ Date de début attendue doit être une date valide.',
-            'expected_date_end.date' => 'Le champ Date de fin attendue doit être une date valide.',
-            'hours_start.required' => 'Le champ Heure de début est obligatoire.',
-            'hours_start.date_format' => 'Le champ Heure de début doit être au format H:i:s.',
-            'hours_end.date_format' => 'Le champ Heure de fin doit être au format H:i:s.',
-            'hours_end.after' => 'Le champ Heure de fin doit être postérieure à l\'heure de début.',
+            'hours.required' => 'Le champ Heure de début est obligatoire.',
         ]);
         $event = new Event();
 
@@ -76,6 +76,11 @@ class EventController extends Controller
             $event->{$field} = $value;
         }
 
+        $event->user_id = Auth::user()->id;
+        if ($event->date_end === null) {
+            $event->date_end = $event->date_start;
+        }
+        
         $event->save();
 
         return redirect()->route('dashboard')->with('success', 'Event created successfully');
@@ -104,32 +109,28 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         $rules = [
-            'structures_id' => ['required', 'integer', 'exists:structures,id'],
+            'structure_id' => ['required', 'integer', 'exists:structures,id'],
             'partners' => ['required', "string"],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['required', 'string'],
             'status' => ['nullable', 'string', 'max:50'],
-            'number_of_participants' => ['required', 'string'],
+            'numberOfParticipants' => ['required', 'string'],
             'date_start' => ['nullable', 'date'],
             'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
-            'expected_date_start' => ['nullable', 'date'],
-            'expected_date_end' => ['nullable', 'date', 'after_or_equal:expected_date_start'],
             'hours_start' => ['required'],
             'hours_end' => ['nullable', 'after:hours_start'],
             'organizer_needs' => ['nullable'],
         ];
         try {
             $validated = $request->validate($rules, [
-                'structures_id.required' => 'Le champs structure doit être définis',
+                'structure_id.required' => 'Le champs structure doit être définis',
                 'partners.required' => 'Le champs structure doit être définis',
                 'name.required' => 'Le champ Nom est obligatoire.',
                 'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
                 'description.required' => 'Le champ Description est obligatoire.',
-                'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
+                'numberOfParticipants.required' => 'Le champ Nombre de participants est obligatoire.',
                 'date_start.date' => 'Le champ Date de début doit être une date valide.',
                 'date_end.date' => 'Le champ Date de fin doit être une date valide.',
-                'expected_date_start.date' => 'Le champ Date de début attendue doit être une date valide.',
-                'expected_date_end.date' => 'Le champ Date de fin attendue doit être une date valide.',
                 'hours_start.required' => 'Le champ Heure de début est obligatoire.',
                 'hours_start.date_format' => 'Le champ Heure de début doit être au format H:i:s.',
                 'hours_end.date_format' => 'Le champ Heure de fin doit être au format H:i:s.',
@@ -141,7 +142,6 @@ class EventController extends Controller
             $event->save();
 
             return redirect()->route('event.list')->with('success', 'Event created successfully');
-
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         }

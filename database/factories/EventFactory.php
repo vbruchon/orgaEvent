@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\NumberOfParticipants;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Structure;
 use App\Models\Partner;
@@ -25,7 +26,6 @@ class EventFactory extends Factory
             'name' => $this->faker->sentence,
             'partners' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'number_of_participants' => $this->faker->numberBetween(1, 100),
             'location' => $this->faker->sentence,
             'date_start' => $this->faker->date(),
             'date_end' => $this->faker->date(),
@@ -33,6 +33,7 @@ class EventFactory extends Factory
             'organizer_needs' => $this->faker->text,
             'structure_id' => Structure::pluck('id')->random(),
             'status_id' => Status::pluck('id')->random(),
+            'number_of_participants_id' => NumberOfParticipants::pluck('id')->random(),
             'user_id' => User::pluck('id')->random(),
         ];
     }
