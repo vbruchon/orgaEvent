@@ -18,7 +18,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        $events = Event::all()->where('date_end', '>', now());
         return view('event.list', ['events' => $events]);
     }
 
@@ -75,14 +75,13 @@ class EventController extends Controller
         $event = new Event();
 
         foreach ($validated as $field => $value) {
-            $event->{$field} = $value;
+            if($field === "date_end" && $value === null){
+                $event->date_end = $event->date_start;
+            } else {
+                $event->{$field} = $value;
+            }
         }
-        if ($event->date_end === null) {
-            $event->date_end = $event->date_start;
-        }
-        $event->is_Fix = $request->has('is_Fix');
-
-
+        $event->is_Fix = $request->has('is_Fix'); //Check if checkbox is_Fix is checked
         $event->user_id = Auth::user()->id;
 
         $event->save();
