@@ -63,24 +63,15 @@
                                 Au
                             </div>
                         </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Date prévisionnel de début
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Date prévisionnel de fin
-                            </div>
-                        </th>
+                        
                         <th class="p-2 border-r cursor-pointer text-lg font-thin text-gray-500">
                             <div class="flex items-center justify-center font-semibold">
-                                De
+                                Horraires
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
                             <div class="flex items-center justify-center font-semibold">
-                                À
+                                Autheur
                             </div>
                         </th>
                         <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
@@ -104,18 +95,17 @@
                     <tr class="bg-gray-100 text-center border-b text-l text-gray-600">
                         <td class="p-2 border-r">{{$event->id}}</td>
                         <td class="p-2 border-r">{{$event->structure->name}}</td>
-                        <td class="p-2 border-r">{{$event->partners_id}}</td>
+                        <td class="p-2 border-r">{{$event->partners}}</td>
                         <td class="p-2 border-r">{{$event->name}}</td>
                         <td class="p-2 border-r">{{$event->description}}</td>
-                        <td class="p-2 border-r">{{$event->status}}</td>
-                        <td class="p-2 border-r">{{$event->number_of_participants}}</td>
+                        <td class="p-2 border-r">{{$event->status->name}}</td>
+                        <td class="p-2 border-r">{{$event->number_of_participants->name}}</td>
                         <td class="p-2 border-r">{{$event->date_start}}</td>
                         <td class="p-2 border-r">{{$event->date_end}}</td>
-                        <td class="p-2 border-r">{{$event->expected_date_start}}</td>
-                        <td class="p-2 border-r">{{$event->expected_date_end}}</td>
-                        <td class="p-2 border-r">{{$event->hours_start}}</td>
-                        <td class="p-2 border-r">{{$event->hours_end}}</td>
+                        <td class="p-2 border-r">{{$event->hours}}</td>
+                        <td class="p-2 border-r">{{$event->user->name}}</td>
                         <td class="p-2 border-r">{{$event->organizer_needs}}</td>
+
                         <td class="p-2 border-r">
                             <div class="flex flex-nowrap space-x-1 ">
                                 <a href="{{ route('event.edit', $event) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
