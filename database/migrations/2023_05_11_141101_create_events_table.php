@@ -20,6 +20,7 @@ return new class extends Migration
 
             $table->date('date_start');
             $table->date('date_end')->nullable();
+            $table->boolean('is_Fix');
             $table->string('hours')->nullable();
             $table->text('organizer_needs')->nullable();
 

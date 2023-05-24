@@ -5,6 +5,8 @@
         </h2>
     </x-slot>
     <main class="w-full">
+
+
         <form action="{{ route('event.add') }}" method="POST" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
             @csrf
             <label class="mb-3 text-xl" for="structure_id">Structure :</label>
@@ -44,7 +46,7 @@
 
             <label class="mb-3 text-xl" for="number_of_participants_id">Nombre de personnes présentes estimé</label>
             @error('nbre_people')<span class="text-red-600">{{ $message }}</span>@enderror
-            <select class="mb-6 h-8 border-2 border-black @error('nbre_people') is-invalid @enderror" name="number_of_participants_id" >
+            <select class="mb-6 h-8 border-2 border-black @error('nbre_people') is-invalid @enderror" name="number_of_participants_id">
                 <option value="" disabled selected hidden>Choisissez le nombre de personnes prévus</option>
                 @if($numberOfParticipants->count() > 0)
                 @foreach($numberOfParticipants as $participants)
@@ -69,7 +71,14 @@
                 @error('date_end')<span class="text-red-600">{{ $message }}</span>@enderror
                 <input class="mb-6 h-8 border-2 border-black @error('date_end') is-invalid @enderror" name="date_end" type="date" value="{{ old('date_end') }}">
             </div>
-            
+            <label class="mb-3 text-xl" for="is_Fix">Les dates sont :</label>
+            <span class="mb-3 text-xl">Fixe :</span>
+            @error('is_Fix')<span class="text-red-600">{{ $message }}</span>@enderror
+            <input class="mb-6 h-8 border-2 border-black @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" checked value="{{ old('is_Fix') }}">
+
+            <span class="mb-3 text-xl">Prévisionnel :</span>
+            @error('is_not_fix')<span class="text-red-600">{{ $message }}</span>@enderror
+            <input class="mb-6 h-8 border-2 border-black @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" value="{{ old('is_not_fix') }}">
 
             <label class="mb-3 text-xl" for="hourse">Heure de l'événement</label>
             @error('hours_start')<span class="text-red-600">{{ $message }}</span>@enderror

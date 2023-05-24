@@ -29,6 +29,7 @@ class EventFactory extends Factory
             'location' => $this->faker->sentence,
             'date_start' => $this->faker->date(),
             'date_end' => $this->faker->date(),
+            'is_Fix' => true || false,
             'hours' => $this->faker->time(),
             'organizer_needs' => $this->faker->text,
             'structure_id' => Structure::pluck('id')->random(),

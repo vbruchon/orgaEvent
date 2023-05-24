@@ -71,17 +71,20 @@ class EventController extends Controller
             'date_end.date' => 'Le champ Date de fin doit être une date valide.',
             'hours.required' => 'Le champ Heure de début est obligatoire.',
         ]);
+
         $event = new Event();
 
         foreach ($validated as $field => $value) {
             $event->{$field} = $value;
         }
-
-        $event->user_id = Auth::user()->id;
         if ($event->date_end === null) {
             $event->date_end = $event->date_start;
         }
-        
+        $event->is_Fix = $request->has('is_Fix');
+
+
+        $event->user_id = Auth::user()->id;
+
         $event->save();
 
         return redirect()->route('dashboard')->with('success', 'Event created successfully');
