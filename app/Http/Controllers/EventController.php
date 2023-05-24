@@ -7,8 +7,11 @@ use App\Models\Event;
 use App\Models\NumberOfParticipants;
 use App\Models\Status;
 use App\Models\Structure;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
+
 
 class EventController extends Controller
 {
@@ -18,8 +21,26 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all()->where('date_end', '>', now());
-        return view('event.list', ['events' => $events]);
+        $events = Event::orderBy('date_start')->where('date_end', '>', now())->get();
+        $dateStartToString = [];
+        $dateStartToDays = [];
+        $dateEndToDays = [];
+
+        foreach ($events as $event) {
+            $key = $event->id;
+
+            $convertDateStartToString = $this->convertDateToString($event->date_start);
+            $dateStartToString[$key] = $convertDateStartToString;
+
+            $convertDateStartToDays = $this->convertDateToDays($event->date_start);
+            $dateStartToDays[$key] = $convertDateStartToDays;
+
+            if (isset($event->date_end)) {
+                $convertDateEndToDays = $this->convertDateToDays($event->date_end);
+                $dateEndToDays[$key] = $convertDateEndToDays;
+            }
+        }
+        return view('event.list', ['events' => $events, 'dateStartToString' => $dateStartToString, 'dateStartToDays' => $dateStartToDays, 'dateEndToDays' => $dateEndToDays]);
     }
 
     /**
@@ -27,9 +48,9 @@ class EventController extends Controller
      */
     public function create()
     {
-        $structures = Structure::all();
-        $status = Status::all();
-        $numberOfParticipants = NumberOfParticipants::all();
+        $structures = Structure::get();
+        $status = Status::get();
+        $numberOfParticipants = NumberOfParticipants::get();
         $user = Auth::user();
         return view('event.createForm', ['structures' => $structures, 'status' => $status, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
     }
@@ -75,7 +96,7 @@ class EventController extends Controller
         $event = new Event();
 
         foreach ($validated as $field => $value) {
-            if($field === "date_end" && $value === null){
+            if ($field === "date_end" && $value === null) {
                 $event->date_end = $event->date_start;
             } else {
                 $event->{$field} = $value;
@@ -101,7 +122,7 @@ class EventController extends Controller
      */
     public function edit(Event $event, Structure $structures)
     {
-        $structures = Structure::all();
+        $structures = Structure::get();
 
         return view('event.editForm', ['event' => $event, 'structures' => $structures]);
     }
@@ -158,5 +179,44 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('event.list')->with('message', "L'événement a bien été supprimé");
+    }
+
+    public function userContribution()
+    {
+        $user = Auth::user();
+        $events = Event::where('user_id', '=', $user->id)->get;
+
+        return view('event.mycontribution', ['events' => $events]);
+    }
+
+    public function convertDateToString($date)
+    {
+        $newDate = Carbon::parse($date);
+        $now = Carbon::now();
+        $diffInDays = $now->diffInDays($newDate, false);
+        $diffInHumans = $now->diffForHumans($newDate);
+
+        if ($diffInDays > 365) {
+            $diffInYears = floor($diffInDays / 365);
+            $phrase = 'Dans ' . $diffInYears . ' an(s)';
+        } elseif ($diffInDays > 30) {
+            $diffInMonths = floor($diffInDays / 30);
+            $phrase = 'Dans ' . $diffInMonths . ' mois';
+        } elseif ($diffInDays > 0) {
+            $phrase = 'Dans ' . $diffInDays . ' jour(s)';
+        } elseif ($diffInDays === 0) {
+            $phrase = 'Demain';
+        } else {
+            $phrase = $diffInHumans;
+        }
+
+        return $phrase;
+    }
+
+    public function convertDateToDays($date)
+    {
+        $newDate = Carbon::parse($date);
+
+        return ucwords($newDate->isoFormat('dddd D MMMM Y'));
     }
 }
