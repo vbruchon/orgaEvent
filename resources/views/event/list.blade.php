@@ -21,25 +21,38 @@
 
             @foreach($events as $event)
             <div class="p-8 border-2 w-1/2 mb-6 mx-auto">
-                <p class="p-8 font-semibold">{{$event->name}}</p>
+                <p class="p-8 font-semibold text-3xl">{{$event->name}}</p>
+                <div class="flex mb-5 ">
+                    <img class="w-1/20" src="{{ asset('image/school.png') }}" alt="L'image est là">
+                    <p class="p-2 mr-12 text-lg"> : {{$event->structure->name}}</p>
+                
+                    <img class="w-1/20" src="{{ asset('image/partners.png') }}" alt="L'image est là">
+                    <p class="p-2 text-lg"> : {{$event->partners}}</p>
+                </div>
+                <div class="flex mb-5">
+                    <img class="w-1/20" src="{{ asset('image/description.png') }}" alt="L'image est là">
+                    <p class="p-2 text-lg">{{$event->description}}</p>
+                </div>
+                <div class="flex mb-5">
+                    <img src="{{ asset('image/status.png') }}" alt="L'image est là" class="w-1/20">
+                    <p class="p-2 text-lg"> : {{$event->status->name}}</p>
+                </div>
+                <div class="flex mb-5">
+                    <img src="{{ asset('image/participants.png') }}" alt="L'image est là" class="w-1/20">
+                    <p class="p-2 text-lg"> : {{$event->number_of_participants->name}}</p>
+                </div>
 
-                <p class="p-2 ">Structure : {{$event->structure->name}}</p>
-                <p class="p-2 ">Parenaires : {{$event->partners}}</p>
-                <p class="p-2 ">{{$event->description}}</p>
-                <p class="p-2 ">Status : {{$event->status->name}}</p>
-                <p class="p-2 ">Nbre participants : {{$event->number_of_participants->name}}</p>
 
 
-
-
-                <div class="flex">
+                <div class="flex mb-5">
+                    <img src="{{ asset('image/date.png') }}" alt="L'image est là" class="w-1/20">
                     @if($event->date_start === $event->date_end)
-                    <p class="p-2">{{$dateStartToDays[$event->id]}}</p>
+                    <p class="p-2 text-lg"> : {{$dateStartToDays[$event->id]}}</p>
                     @else
-                    <p class="p-2">{{$dateStartToDays[$event->id]}}</p>
-                    <p class="p-2">{{$dateEndToDays[$event->id]}}</p>
+                    <p class="p-2 text-lg"> : {{$dateStartToDays[$event->id]}}</p>
+                    <p class="p-2 text-lg">{{$dateEndToDays[$event->id]}}</p>
                     @endif
-                    <p class="p-2 ">{{$event->hours}}</p>
+                    <p class="p-2 text-lg">{{$event->hours}}</p>
                 </div>
                 <p class="italic">{{$event->organizer_needs}}</p>
             </div>
