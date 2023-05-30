@@ -13,7 +13,7 @@ class StatusController extends Controller
      */
     public function index()
     {
-        $status = Status::all();
+        $status = Status::get();
 
         return view('status.list', ['status' => $status]);
     }

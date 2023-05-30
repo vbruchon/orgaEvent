@@ -5,10 +5,8 @@ namespace Database\Factories;
 use App\Models\NumberOfParticipants;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Structure;
-use App\Models\Partner;
 use App\Models\Status;
 use App\Models\User;
-use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>

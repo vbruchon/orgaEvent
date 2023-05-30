@@ -12,7 +12,7 @@ class StructureController extends Controller
      */
     public function index()
     {
-        $structures = Structure::all();
+        $structures = Structure::get();
         return view('structure.list', ['structures' => $structures]);
     }
 

@@ -12,7 +12,7 @@ class NumberOfParticipantsController extends Controller
      */
     public function index()
     {
-        $numberOfParticipants = NumberOfParticipants::all();
+        $numberOfParticipants = NumberOfParticipants::get();
 
         return view('numberOfParticipants.list', ['numberOfParticipants' => $numberOfParticipants]);
     }
