@@ -45,7 +45,7 @@ class StatusController extends Controller
         $status->name = $rules['name'];
         $status->save();
 
-        return redirect()->route('status.list')->with('success', 'Le status à était ajouté avec succès.');
+        return redirect()->route('admin.status.list')->with('success', 'Le status à était ajouté avec succès.');
     }
 
     /**
@@ -71,7 +71,7 @@ class StatusController extends Controller
     {
         $this->store($status, $request);
 
-        return redirect()->route('status.list')->with('success', 'Le partenaire a été modifié avec succès !');
+        return redirect()->route('admin.status.list')->with('success', 'Le partenaire a été modifié avec succès !');
     }
 
     /**
@@ -80,6 +80,6 @@ class StatusController extends Controller
     public function destroy(Status $status)
     {
         $status->delete();
-        return redirect()->route('status.list')->with('success', 'Le status a été supprimé avec succès !');
+        return redirect()->route('admin.status.list')->with('success', 'Le status a été supprimé avec succès !');
     }
 }

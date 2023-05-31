@@ -50,11 +50,11 @@
                             <td class="p-2 border-r">{{$user->email}}</td>
                             <td class="p-2 border-r">
                                 <div class="flex space-x-1 justify-center">
-                                    <a href="{{ route('users.edit', $user) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
+                                    <a href="{{ route('admin.users.edit', $user) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
                                         Modifier
                                     </a>
 
-                                    <form method="post" action="{{ route('users.delete', $user) }}">
+                                    <form method="post" action="{{ route('admin.users.destroy', $user) }}">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="bg-red-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold">

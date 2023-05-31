@@ -43,7 +43,7 @@ class StructureController extends Controller
         $structure->name = $rules['name'];
         $structure->save();
 
-        return redirect()->route('structure.list')->with('success', 'Structure ajoutée avec succès !');
+        return redirect()->route('admin.structure.list')->with('success', 'Structure ajoutée avec succès !');
     }
 
     /**
@@ -81,7 +81,7 @@ class StructureController extends Controller
         $structure->name = $rules['name'];
         $structure->save();
 
-        return redirect()->route('structure.list')->with('success', 'Structure modifiée avec succès !');
+        return redirect()->route('admin.structure.list')->with('success', 'Structure modifiée avec succès !');
     }
 
     /**
@@ -91,6 +91,6 @@ class StructureController extends Controller
     {
         $structure->delete();
 
-        return redirect()->route('structure.list')->with('sucess', 'La structure à bien était supprimée');
+        return redirect()->route('admin.structure.list')->with('sucess', 'La structure à bien était supprimée');
     }
 }

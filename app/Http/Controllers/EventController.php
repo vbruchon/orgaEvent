@@ -15,12 +15,23 @@ use Carbon\Carbon;
 
 class EventController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        // Vérification de l'authentification de l'utilisateur
+        if (Auth::check()) {
+            // Vérification du rôle de l'utilisateur
+            if (Auth::user()->is_admin) {
+                $isAdmin = true;
+            } else {
+                $isAdmin = false;
+            }
+        } else {
+            $isAdmin = false;
+        }
+
         $events = Event::orderBy('date_start')->where('date_end', '>', now())->get();
         $dateStartToString = [];
         $dateStartToDays = [];
@@ -40,7 +51,13 @@ class EventController extends Controller
                 $dateEndToDays[$key] = $convertDateEndToDays;
             }
         }
-        return view('event.list', ['events' => $events, 'dateStartToString' => $dateStartToString, 'dateStartToDays' => $dateStartToDays, 'dateEndToDays' => $dateEndToDays]);
+        return view('event.list', [
+            'events' => $events, 
+            'dateStartToString' => $dateStartToString, 
+            'dateStartToDays' => $dateStartToDays, 
+            'dateEndToDays' => $dateEndToDays,
+            'isAdmin' => $isAdmin
+        ]);
     }
 
     /**
@@ -165,7 +182,7 @@ class EventController extends Controller
             }
             $event->save();
 
-            return redirect()->route('event.list')->with('success', 'Event created successfully');
+            return redirect()->route('userEvent.all')->with('success', 'Event created successfully');
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         }
@@ -178,13 +195,13 @@ class EventController extends Controller
     {
         $event->delete();
 
-        return redirect()->route('event.list')->with('message', "L'événement a bien été supprimé");
+        return redirect()->route('userEvent.all')->with('message', "L'événement a bien été supprimé");
     }
 
     public function userContribution()
     {
         $user = Auth::user();
-        $events = Event::where('user_id', '=', $user->id)->get;
+        $events = Event::where('user_id', '=', $user->id)->get();
 
         return view('event.mycontribution', ['events' => $events]);
     }

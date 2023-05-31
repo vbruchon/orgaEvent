@@ -7,7 +7,7 @@
     <main class="w-full">
 
 
-        <form action="{{ route('event.add') }}" method="POST" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
+        <form action="{{ route('userEvent.add') }}" method="POST" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
             @csrf
             <label class="mb-3 text-xl" for="structure_id">Structure :</label>
             <select name="structure_id" id="" class="mb-6 h-8 border-2 border-black">

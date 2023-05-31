@@ -5,17 +5,18 @@
         </h2>
     </x-slot>
     @if (session('success'))
-        <div class="bg-green-400 p-6 text-center m-6 rounded shadow border border-green-800 animate-ping">
-            {{ session('success') }}
-        </div>
-        @endif
+    <div class="bg-green-400 p-6 text-center m-6 rounded shadow border border-green-800 animate-ping">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="mb-8"></div>
-    <a href="{{route('event.list')}}" class="bg-amber-500 rounded-full pt-2 pb-2 pr-3 pl-3 ml-16 mt-16 font-semibold ">
+    
+    <a href="{{route('userEvent.all')}}" class="bg-amber-500 rounded-full pt-2 pb-2 pr-3 pl-3 ml-16 mt-16 font-semibold ">
         Retourner à l'Accueil
     </a>
 
 
-    <form method="post" action="{{route('event.update', $event)}}" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
+    <form method="post" action="{{route('userEvent.update', $event)}}" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
         @csrf
         @method('put')
         <label class="mb-3 text-xl" for="structures_id">Structure :</label>

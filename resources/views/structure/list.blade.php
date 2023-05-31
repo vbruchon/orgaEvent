@@ -11,7 +11,7 @@
         </div>
         @endif
         <main class="w-full mt-10">
-            <a href="{{ route('structure.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter une nouvelle structure</a>
+            <a href="{{ route('admin.structure.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter une nouvelle structure</a>
             <div class="table w-full p-2 mt-8">
                 <table class="w-3/4 border mx-auto my-4">
                     <thead>
@@ -45,11 +45,11 @@
                             <td class="p-2 border-r">{{$structure->name}}</td>
                             <td class="p-2 border-r">
                                 <div class="flex space-x-1 justify-center">
-                                    <a href="{{ route('structure.edit', $structure)}}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
+                                    <a href="{{ route('admin.structure.edit', $structure)}}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
                                         Modifier
                                     </a>
 
-                                    <form method="post" action="{{ route('structure.delete', ['structure' => $structure->id]) }}">
+                                    <form method="post" action="{{ route('admin.structure.destroy', ['structure' => $structure->id]) }}">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="bg-red-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold">

@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <main class="w-full">
-        <form action="{{ route('numberOfParticipants.store') }}" method="post" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
+        <form action="{{ route('admin.numberOfParticipants.store') }}" method="post" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
             @csrf
             <label class="mb-3 text-xl" for="name">Nom du status :</label>
             @error('name')<span class="text-red-600">{{ $message }}</span>@enderror

@@ -5,6 +5,6 @@
         </h2>
     </x-slot>
     <main class="w-full">
-        <x-form-edit route="structure.update" :model="$structure" />
+        <x-form-edit route="admin.structure.update" :model="$structure" />
     </main>
 </x-app-layout>

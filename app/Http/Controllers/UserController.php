@@ -60,7 +60,7 @@ class UserController extends Controller
     {
         $this->store($user, $request);
 
-        return redirect()->route('users.list')->with('success', 'L\'utilisateur a été modifié avec succès !');
+        return redirect()->route('admin.users.list')->with('success', 'L\'utilisateur a été modifié avec succès !');
     }
 
     /**
@@ -69,6 +69,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('users.list')->with('success', 'L\'utilisateur a été supprimé avec succès !');
+        return redirect()->route('admin.users.list')->with('success', 'L\'utilisateur a été supprimé avec succès !');
     }
 }

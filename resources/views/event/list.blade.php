@@ -12,8 +12,8 @@
     <main class="w-full mt-10">
 
         <div class="mb-8">
-            <a href="{{ route('event.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
-            <a href="{{ route('event.my') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">User Contribution</a>
+            <a href="{{ route('userEvent.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
+            <a href="{{ route('userEvent.my') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">User Contribution</a>
         </div>
 
 
@@ -25,7 +25,7 @@
                 <div class="flex mb-5 ">
                     <img class="w-1/20" src="{{ asset('image/school.png') }}" alt="L'image est là">
                     <p class="p-2 mr-12 text-lg"> : {{$event->structure->name}}</p>
-                
+
                     <img class="w-1/20" src="{{ asset('image/partners.png') }}" alt="L'image est là">
                     <p class="p-2 text-lg"> : {{$event->partners}}</p>
                 </div>
@@ -55,6 +55,21 @@
                     <p class="p-2 text-lg">{{$event->hours}}</p>
                 </div>
                 <p class="italic">{{$event->organizer_needs}}</p>
+                @if($isAdmin)
+                <div class="flex flex-nowrap justify-end space-x-1 ">
+                    <a href="{{ route('userEvent.edit', $event) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
+                        Modifier
+                    </a>
+
+                    <form method="post" action="{{ route('userEvent.destroy', $event->id) }}">
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="bg-red-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold">
+                            Supprimer
+                        </button>
+                    </form>
+                </div>
+                @endif
             </div>
 
 

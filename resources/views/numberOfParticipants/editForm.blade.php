@@ -5,6 +5,6 @@
         </h2>
     </x-slot>
     <main class="w-full">
-        <x-form-edit route="numberOfParticipants.update" :model="$numberOfParticipant" />
+        <x-form-edit route="admin.numberOfParticipants.update" :model="$numberOfParticipant" />
     </main>
 </x-app-layout>

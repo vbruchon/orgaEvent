@@ -11,7 +11,7 @@
         </div>
         @endif
         <main class="w-full mt-10">
-            <a href="{{ route('status.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouveau status</a>
+            <a href="{{ route('admin.status.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouveau status</a>
             <div class="table w-full p-2 mt-8">
                 <table class="w-3/4 border mx-auto my-4">
                     <thead>
@@ -45,11 +45,11 @@
                             <td class="p-2 border-r">{{$s->name}}</td>
                             <td class="p-2 border-r">
                                 <div class="flex space-x-1 justify-center">
-                                    <a href="{{ route('status.edit', $s) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
+                                    <a href="{{ route('admin.status.edit', $s) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
                                         Modifier
                                     </a>
 
-                                    <form method="post" action="{{ route('status.delete', ['status' => $s]) }}">
+                                    <form method="post" action="{{ route('admin.status.destroy', ['status' => $s]) }}">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="bg-red-500 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold">

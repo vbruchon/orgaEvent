@@ -17,33 +17,14 @@
                     </x-nav-link>
                 </div>
 
+                @foreach(\App\Helpers\NavigationHelper::getNavigationLinks() as $link)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('event.list')" :active="request()->routeIs('event.list')">
-                        {{ __('Événements') }}
+                    <x-nav-link :href="$link['url']" :active="request()->routeIs($link['url'])">
+                        {{ $link['label'] }}
                     </x-nav-link>
                 </div>
+                @endforeach
 
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('structure.list')" :active="request()->routeIs('structure')">
-                        {{ __('Structures') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('status.list')" :active="request()->routeIs('status.list')">
-                        {{ __('Status') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('users.list')" :active="request()->routeIs('users.list')">
-                        {{ __('Utilisateurs') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('numberOfParticipants.list')" :active="request()->routeIs('numberOfParticipants.list')">
-                        {{ __('Nombre de participants') }}
-                    </x-nav-link>
-                </div>
             </div>
 
             <!-- Settings Dropdown -->

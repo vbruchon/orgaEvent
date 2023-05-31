@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <main class="w-full">
-        <form action="{{ route('users.update', $user) }}" method="post" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
+        <form action="{{ route('admin.users.update', $user) }}" method="post" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
             @csrf
             @method('put')
             <label class="mb-3 text-xl" for="name">Nom :</label>

@@ -44,7 +44,7 @@ class NumberOfParticipantsController extends Controller
         $numberOfParticipant->name = $rules['name'];
         $numberOfParticipant->save();
 
-        return redirect()->route('numberOfParticipants.list')->with('success', 'Le nombre de participants à était ajouté avec succès.');
+        return redirect()->route('admin.numberOfParticipants.list')->with('success', 'Le nombre de participants à était ajouté avec succès.');
     }
 
 
@@ -63,7 +63,7 @@ class NumberOfParticipantsController extends Controller
     {
         $this->store($request, $numberOfParticipant);
 
-        return redirect()->route('numberOfParticipants.list')->with('success', 'Le nombre de participants a été modifié avec succès !');
+        return redirect()->route('admin.numberOfParticipants.list')->with('success', 'Le nombre de participants a été modifié avec succès !');
     }
 
     /**
@@ -73,6 +73,6 @@ class NumberOfParticipantsController extends Controller
     {
         $numberOfParticipant->delete();
         
-        return redirect()->route('numberOfParticipants.list')->with('success', 'Le nombre de participants a été supprimé avec succès !');
+        return redirect()->route('admin.numberOfParticipants.list')->with('success', 'Le nombre de participants a été supprimé avec succès !');
     }
 }
