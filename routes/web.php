@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController,
     App\Http\Controllers\StatusController,
     App\Http\Controllers\StructureController;
 use App\Http\Controllers\UserController;
+use Barryvdh\Debugbar\DataCollector\EventCollector;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,6 +73,7 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('events')->name('userEvent.')->group(function () {
             Route::get('/', [EventController::class, 'index'])->name('all');
+            Route::get('/filtered', [EventController::class, 'filteredEvents'])->name('filter');
             Route::get('/create', [EventController::class, 'create'])->name('create');
             Route::get('/my', [EventController::class, 'userContribution'])->name('my');
             Route::post('/add', [EventController::class, 'store'])->name('add');

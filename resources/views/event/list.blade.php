@@ -15,10 +15,18 @@
             <a href="{{ route('userEvent.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
             <a href="{{ route('userEvent.my') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">User Contribution</a>
         </div>
+        @if(isset($selectedStructure) || isset($selectedStatus) || isset($selectedParticipants))
+        <x-filterbar :structures="$structures" :selectedStructure="isset($selectedStructure) ? $selectedStructure : ''" :status="$status" :selectedStatus="isset($selectedStatus) ? $selectedStatus : ''" :numberOfParticipants="$numberOfParticipants" :selectedParticipant="isset($selectedParticipant) ? $selectedParticipant : ''" :route="'userEvent.filter'" />
+        @else
+        <x-filterbar :structures="$structures" :status="$status" :numberOfParticipants="$numberOfParticipants" route="userEvent.filter" />
+        @endif
+
 
 
         <div class="events">
-
+            @if($events->isEmpty())
+            <p>Aucun événement trouvé.</p>
+            @else
             @foreach($events as $event)
             <div class="p-8 border-2 w-1/2 mb-6 mx-auto">
                 <p class="p-8 font-semibold text-3xl">{{$event->name}}</p>
@@ -41,9 +49,6 @@
                     <img src="{{ asset('image/participants.png') }}" alt="L'image est là" class="w-1/20">
                     <p class="p-2 text-lg"> : {{$event->number_of_participants->name}}</p>
                 </div>
-
-
-
                 <div class="flex mb-5">
                     <img src="{{ asset('image/date.png') }}" alt="L'image est là" class="w-1/20">
                     @if($event->date_start === $event->date_end)
@@ -60,7 +65,6 @@
                     <a href="{{ route('userEvent.edit', $event) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
                         Modifier
                     </a>
-
                     <form method="post" action="{{ route('userEvent.destroy', $event->id) }}">
                         @csrf
                         @method('delete')
@@ -71,13 +75,12 @@
                 </div>
                 @endif
             </div>
-
-
             @if(isset($dateStartToString[$event->id]))
             <p class="p-2">{{$dateStartToString[$event->id]}}</p>
             @endif
+            @endforeach
+            @endif
         </div>
-        @endforeach
         <script>
             let sucessMessage = document.getElementById('success-message');
 

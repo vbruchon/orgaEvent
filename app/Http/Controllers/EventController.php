@@ -20,17 +20,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        // Vérification de l'authentification de l'utilisateur
-        if (Auth::check()) {
-            // Vérification du rôle de l'utilisateur
-            if (Auth::user()->is_admin) {
-                $isAdmin = true;
-            } else {
-                $isAdmin = false;
-            }
-        } else {
-            $isAdmin = false;
-        }
+
 
         $events = Event::orderBy('date_start')->where('date_end', '>', now())->get();
         $dateStartToString = [];
@@ -51,12 +41,20 @@ class EventController extends Controller
                 $dateEndToDays[$key] = $convertDateEndToDays;
             }
         }
+        $isAdmin = $this->checkUserAdmin();
+
+        $structures = Structure::get();
+        $status = Status::get();
+        $numberOfParticipants = NumberOfParticipants::get();
         return view('event.list', [
-            'events' => $events, 
-            'dateStartToString' => $dateStartToString, 
-            'dateStartToDays' => $dateStartToDays, 
+            'events' => $events,
+            'dateStartToString' => $dateStartToString,
+            'dateStartToDays' => $dateStartToDays,
             'dateEndToDays' => $dateEndToDays,
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin,
+            'structures' => $structures,
+            'status' => $status,
+            'numberOfParticipants' => $numberOfParticipants
         ]);
     }
 
@@ -140,8 +138,11 @@ class EventController extends Controller
     public function edit(Event $event, Structure $structures)
     {
         $structures = Structure::get();
+        $status = Status::get();
+        $numberOfParticipants = NumberOfParticipants::get();
+        $user = Auth::user();
 
-        return view('event.editForm', ['event' => $event, 'structures' => $structures]);
+        return view('event.editForm', ['event' => $event, 'structures' => $structures, 'status' => $status, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
     }
 
     /**
@@ -153,29 +154,27 @@ class EventController extends Controller
             'structure_id' => ['required', 'integer', 'exists:structures,id'],
             'partners' => ['required', "string"],
             'name' => ['required', 'string', 'max:150'],
-            'description' => ['required', 'string'],
-            'status' => ['nullable', 'string', 'max:50'],
-            'numberOfParticipants' => ['required', 'string'],
-            'date_start' => ['nullable', 'date'],
+            'description' => ['string'],
+            'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
+            'number_of_participants_id' => ['required', 'string'],
+            'location' => ['nullable', 'string'],
+            'date_start' => ['required', 'date'],
             'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
-            'hours_start' => ['required'],
-            'hours_end' => ['nullable', 'after:hours_start'],
+            'hours' => ['required', 'string'],
             'organizer_needs' => ['nullable'],
         ];
         try {
             $validated = $request->validate($rules, [
                 'structure_id.required' => 'Le champs structure doit être définis',
+                'status_id.required' => 'Le champs status doit être définis',
                 'partners.required' => 'Le champs structure doit être définis',
                 'name.required' => 'Le champ Nom est obligatoire.',
                 'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
-                'description.required' => 'Le champ Description est obligatoire.',
-                'numberOfParticipants.required' => 'Le champ Nombre de participants est obligatoire.',
+                'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
+                'date_start.required' => 'Le champ Date  de début est obligatoire.',
                 'date_start.date' => 'Le champ Date de début doit être une date valide.',
                 'date_end.date' => 'Le champ Date de fin doit être une date valide.',
-                'hours_start.required' => 'Le champ Heure de début est obligatoire.',
-                'hours_start.date_format' => 'Le champ Heure de début doit être au format H:i:s.',
-                'hours_end.date_format' => 'Le champ Heure de fin doit être au format H:i:s.',
-                'hours_end.after' => 'Le champ Heure de fin doit être postérieure à l\'heure de début.',
+                'hours.required' => 'Le champ Heure de début est obligatoire.',
             ]);
             foreach ($validated as $field => $value) {
                 $event->{$field} = $value;
@@ -205,6 +204,108 @@ class EventController extends Controller
 
         return view('event.mycontribution', ['events' => $events]);
     }
+
+    public function filteredEvents(Request $request)
+    {
+        $isAdmin = $this->checkUserAdmin();
+        $selectedStructure = $request->input('structure');
+        $selectedStatus = $request->input('status');
+        $selectedParticipant = $request->input('number_of_participants');
+        $structures = Structure::get();
+        $status = Status::get();
+        $numberOfParticipants = NumberOfParticipants::get();
+
+        $query = $this->applyFilters($request);
+
+        $events = $query->get();
+
+        if (sizeof($events) < 1) {
+            return view('event.list', [
+                'events' => $events, 'isAdmin' => $isAdmin,
+                'structures' => $structures,
+                'status' => $status,
+                'numberOfParticipants' => $numberOfParticipants,
+                'selectedStructure' => $selectedStructure,
+                'selectedStatus' => $selectedStatus,
+                'selectedParticipant' => $selectedParticipant,
+            ]);
+        } else {
+            foreach ($events as $event) {
+                $key = $event->id;
+
+                $convertDateStartToString = $this->convertDateToString($event->date_start);
+                $dateStartToString[$key] = $convertDateStartToString;
+
+                $convertDateStartToDays = $this->convertDateToDays($event->date_start);
+                $dateStartToDays[$key] = $convertDateStartToDays;
+
+                if (isset($event->date_end)) {
+                    $convertDateEndToDays = $this->convertDateToDays($event->date_end);
+                    $dateEndToDays[$key] = $convertDateEndToDays;
+                }
+            }
+
+
+            return view('event.list', [
+                'events' => $events,
+                'dateStartToString' => $dateStartToString,
+                'dateStartToDays' => $dateStartToDays,
+                'dateEndToDays' => $dateEndToDays,
+                'isAdmin' => $isAdmin,
+                'structures' => $structures,
+                'status' => $status,
+                'numberOfParticipants' => $numberOfParticipants,
+                'selectedStructure' => $selectedStructure,
+                'selectedStatus' => $selectedStatus,
+                'selectedParticipant' => $selectedParticipant,
+            ]);
+        }
+    }
+
+    private function applyFilters(Request $request)
+    {
+        $query = Event::query();
+
+        if ($request->filled('structure')) {
+            $structureName = $request->input('structure');
+            $structure = Structure::where('name', $structureName)->first();
+
+            if ($structure) {
+                $query->where('structure_id', $structure->id);
+            }
+        }
+
+        if ($request->filled('status')) {
+            $statusName = $request->input('status');
+            $status = Status::where('name', $statusName)->first();
+
+            if ($status) {
+                $query->where('status_id', $status->id);
+            }
+        }
+
+        if ($request->filled('number_of_participants')) {
+            $numberLabel = $request->input('number_of_participants');
+            $participants = NumberOfParticipants::where('name', $numberLabel)->first();
+
+            if ($participants) {
+                $query->where('number_of_participants_id', $participants->id);
+            }
+        }
+
+        return $query;
+    }
+
+    private function checkUserAdmin()
+    {
+        if (Auth::check()) {
+            return Auth::user()->is_admin;
+        }
+
+        return false;
+    }
+
+
 
     public function convertDateToString($date)
     {
