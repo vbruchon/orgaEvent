@@ -14,104 +14,49 @@
 
         <a href="{{ route('userEvent.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouvel événement</a>
 
-        <div class="table w-full p-2 mt-8 w-fit">
-            <table class="w-full border">
-                <thead>
-                    <tr class="bg-gray-50 border-b">
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                ID
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Structure Organisatrice
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Partenaires Organisateurs
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Intitulé
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Description de l'événement
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Status
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Nombre de participants
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Du
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Au
-                            </div>
-                        </th>
-                        
-                        <th class="p-2 border-r cursor-pointer text-lg font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Horraires
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Autheur
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Besoins de l'organisateur
-                            </div>
-                        </th>
-                        <th class="p-2 border-r cursor-pointer text-l font-thin text-gray-500">
-                            <div class="flex items-center justify-center font-semibold">
-                                Action
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                @foreach($events as $event)
+        <div class="events">
+                    @if($events->isEmpty())
+                    <div class="p-8 border-2 w-3/4 mb-6 mx-auto mt-16">
+                        <p class="">Aucun événement trouvé.</p>
+                    </div>
+                    @else
+                    @foreach($events as $event)
+                    <div class="relative">
+                        <div class="p-8 border-2 w-3/4 mt-16 mb-6 mx-auto">
+                            <p class="p-8 font-semibold text-3xl">{{$event->name}}</p>
+                            <div class="flex mb-5 ">
+                                <img class="w-4 h-auto" src="{{ asset('image/school.png') }}" alt="L'image est là">
+                                <p class="p-2 mr-12 text-lg">  {{$event->structure->name}}</p>
 
-                <tbody>
-                    <tr class="bg-gray-50 text-center">
-                        <td class="p-2 border-r">
-                    </tr>
-                    <tr class="bg-gray-100 text-center border-b text-l text-gray-600">
-                        <td class="p-2 border-r">{{$event->id}}</td>
-                        <td class="p-2 border-r">{{$event->structure->name}}</td>
-                        <td class="p-2 border-r">{{$event->partners}}</td>
-                        <td class="p-2 border-r">{{$event->name}}</td>
-                        <td class="p-2 border-r">{{$event->description}}</td>
-                        <td class="p-2 border-r">{{$event->status->name}}</td>
-                        <td class="p-2 border-r">{{$event->number_of_participants->name}}</td>
-                        <td class="p-2 border-r">{{$event->date_start}}</td>
-                        <td class="p-2 border-r">{{$event->date_end}}</td>
-                        <td class="p-2 border-r">{{$event->hours}}</td>
-                        <td class="p-2 border-r">{{$event->user->name}}</td>
-                        <td class="p-2 border-r">{{$event->organizer_needs}}</td>
-
-                        <td class="p-2 border-r">
-                            <div class="flex flex-nowrap space-x-1 ">
+                                <img class="w-4 h-2/100" src="{{ asset('image/partners.png') }}" alt="L'image est là">
+                                <p class="p-2 text-lg"> : {{$event->partners}}</p>
+                            </div>
+                            <div class="flex mb-5">
+                                <img class="w-5/100 h-auto" src="{{ asset('image/description.png') }}" alt="L'image est là">
+                                <p class="p-2 text-lg">{{$event->description}}</p>
+                            </div>
+                            <div class="flex mb-5">
+                                <img src="{{ asset('image/status.png') }}" alt="L'image est là" class="w-4 h-auto">
+                                <p class="p-2 text-lg">  {{$event->status->name}}</p>
+                            </div>
+                            <div class="flex mb-5">
+                                <img src="{{ asset('image/participants.png') }}" alt="L'image est là" class="w-4 h-auto">
+                                <p class="p-2 text-lg"> {{$event->number_of_participants->name}}</p>
+                            </div>
+                            <div class="flex mb-5">
+                                <img src="{{ asset('image/date.png') }}" alt="L'image est là" class="w-4 h-auto">
+                                
+                                <p class="p-2 text-lg"> {{$event->date_start}}</p>
+                                @if($event->date_end !== $event->date_start)
+                                <p class="p-2 text-lg"> {{$event->date_end}}</p>
+                                @endif
+                                <p class="p-2 text-lg">{{$event->hours}}</p>
+                            </div>
+                            <p class="italic">{{$event->organizer_needs}}</p>
+                            <div class="flex flex-nowrap justify-end space-x-1 ">
                                 <a href="{{ route('userEvent.edit', $event) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
                                     Modifier
                                 </a>
-
                                 <form method="post" action="{{ route('userEvent.destroy', $event->id) }}">
                                     @csrf
                                     @method('delete')
@@ -120,13 +65,11 @@
                                     </button>
                                 </form>
                             </div>
-                        </td>
-                    </tr>
-                </tbody>
-                @endforeach
-
-            </table>
-        </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                </div>
         <script>
             let sucessMessage = document.getElementById('success-message');
 
