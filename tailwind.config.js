@@ -27,6 +27,19 @@ export default {
                     }
                 }
             },
+            width: {
+                '4': '4%',
+                '5/100': '5%',
+            },
+            height: {
+                '2/100': '2%',
+            },
+            colors: {
+                'custom-purple': '#912197'
+            },
+            margin: {
+                '5/100': '5%'
+            }
         },
 
         plugins: [forms]
