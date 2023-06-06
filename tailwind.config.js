@@ -30,12 +30,15 @@ export default {
             width: {
                 '4': '4%',
                 '5/100': '5%',
+                'sidebar': '15%', 
             },
             height: {
                 '2/100': '2%',
             },
             colors: {
-                'custom-purple': '#912197'
+                'custom-light-purple': '#912197',
+                'custom-purple': '#5E053A',
+                'custom-blue': '#182946'
             },
             margin: {
                 '5/100': '5%'
