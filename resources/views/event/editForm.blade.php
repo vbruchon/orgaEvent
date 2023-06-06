@@ -108,11 +108,11 @@
                 <label class="mb-3 text-xl" for="is_Fix">Les dates sont :</label>
                 <span class="mb-3 text-xl">Fixe :</span>
                 @error('is_Fix')<span class="text-red-600">{{ $message }}</span>@enderror
-                <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2.5 @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" checked value="{{ old('is_Fix') }}">
+                <input class="accent-custom-purple @error('is_Fix') is-invalid @enderror" name="is_Fix" id="fix" type="checkbox" checked value="{{ old('is_Fix') }}">
 
                 <span class="mb-3 text-xl">Prévisionnel :</span>
                 @error('is_not_fix')<span class="text-red-600">{{ $message }}</span>@enderror
-                <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2.5 @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" value="{{ old('is_not_fix') }}">
+                <input class="accent-custom-purple @error('is_not_fix') is-invalid @enderror" name="is_not_fix" id="no-fix" type="checkbox" value="{{ old('is_not_fix') }}">
             </div>
             <div class="flex flex-col w-2/5 mr-8">
 
@@ -132,29 +132,25 @@
         <input class="w-1/5 mb-3 cursor-pointer block mx-auto text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900 transition duration-300 transform hover:scale-105" type="submit" value="Envoyer">
     </form>
     <script>
-        const dateKnow = document.getElementById("date");
-        const dateExpect = document.getElementById("date_expect");
-        const yes = document.getElementById('yes')
-        const no = document.getElementById('no')
 
-        yes.addEventListener("click", () => {
-            no.checked = false;
-            if (dateKnow.className.includes('hidden')) {
-                dateKnow.classList.remove('hidden')
-                dateExpect.classList.add('hidden')
-            } else {
-                dateKnow.classList.add('hidden')
-            }
-        })
+        var previsionnelCheckbox = document.getElementById("no-fix");
+        var fixCheckbox = document.getElementById("fix");
 
-        no.addEventListener("click", () => {
-            yes.checked = false;
-            if (dateExpect.className.includes('hidden')) {
-                dateExpect.classList.remove('hidden')
-                dateKnow.classList.add('hidden')
+        previsionnelCheckbox.addEventListener("click", function() {
+            if (previsionnelCheckbox.checked) {
+                fixCheckbox.checked = false;
             } else {
-                dateExpect.classList.add('hidden')
+                fixCheckbox.checked = true;
             }
-        })
+        });
+
+        fixCheckbox.addEventListener("click", function() {
+            if (previsionnelCheckbox.checked) {
+                previsionnelCheckbox.checked = false;
+            } else {
+                previsionnelCheckbox.checked = true;
+            }
+        });
+        
     </script>
 </x-app-layout>

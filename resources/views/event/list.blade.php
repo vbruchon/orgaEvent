@@ -16,18 +16,9 @@
             <a href="{{ route('userEvent.my') }}" class="w-1/6 mb-3 ml-12 cursor-pointer block text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900 transition duration-300 transform hover:scale-105">Mes contributions</a>
         </div>
         <div class="flex">
-            <aside class="w-1/4 min-h-screen bg-gray-100 fixed overflow-y-auto ml-5/100 mt-5">
-                @if(isset($selectedStructure) || isset($selectedStatus) || isset($selectedParticipants))
-                <x-filterbar :structures="$structures" :selectedStructure="isset($selectedStructure) ? $selectedStructure : ''" :status="$status" :selectedStatus="isset($selectedStatus) ? $selectedStatus : ''" :numberOfParticipants="$numberOfParticipants" :selectedParticipant="isset($selectedParticipant) ? $selectedParticipant : ''" :route="'userEvent.filter'" />
-                @else
-                <x-filterbar :structures="$structures" :status="$status" :numberOfParticipants="$numberOfParticipants" route="userEvent.filter" />
-                @endif
-            </aside>
-
-            <section class="w-3/4 ml-auto">
 
 
-
+            <section class="w-3/4 mr-auto ml-20">
                 <div class="events">
                     @if($events->isEmpty())
                     <div class="p-8 border-2 w-3/4 mb-6 mx-auto">
@@ -66,6 +57,11 @@
                                 <p class="p-2 text-lg">{{$dateEndToDays[$event->id]}}</p>
                                 @endif
                                 <p class="p-2 text-lg">{{$event->hours}}</p>
+                                @if($event->is_Fix === 1)
+                                <p class="p-2 text-lg"> (date fix)</p>
+                                @else
+                                <p class="p-2 text-lg"> (date prévisionnelle)</p>
+                                @endif
                             </div>
                             <p class="italic">{{$event->organizer_needs}}</p>
                             @if($isAdmin)
@@ -84,13 +80,20 @@
                             @endif
                         </div>
                         @if(isset($dateStartToString[$event->id]))
-                        <p class="absolute top-0 right-10 p-2">{{$dateStartToString[$event->id]}}</p>
+                        <p class="absolute top-0 left-10 p-2">{{$dateStartToString[$event->id]}}</p>
                         @endif
                         @endforeach
                         @endif
                     </div>
                 </div>
             </section>
+            <aside class="w-1/4 min-h-screen bg-gray-100 fixed overflow-y-auto right-0 top-50 mt-5">
+                @if(isset($selectedStructure) || isset($selectedStatus) || isset($selectedParticipants))
+                <x-filterbar :structures="$structures" :selectedStructure="isset($selectedStructure) ? $selectedStructure : ''" :status="$status" :selectedStatus="isset($selectedStatus) ? $selectedStatus : ''" :numberOfParticipants="$numberOfParticipants" :selectedParticipant="isset($selectedParticipant) ? $selectedParticipant : ''" :route="'userEvent.filter'" />
+                @else
+                <x-filterbar :structures="$structures" :status="$status" :numberOfParticipants="$numberOfParticipants" route="userEvent.filter" />
+                @endif
+            </aside>
         </div>
         <script>
             let sucessMessage = document.getElementById('success-message');

@@ -13,7 +13,7 @@
         <main class="w-full mt-10">
             <a href="{{ route('admin.numberOfParticipants.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouveau status</a>
             <div class="table w-full p-2 mt-8">
-                <table class="w-3/4 border mx-auto my-4">
+                <table class="w-11/12 border mx-auto my-4">
                     <thead>
                         <tr class="bg-gray-50 border-b">
                             <th class="p-2 border-r cursor-pointer text-xl font-thin text-gray-500">
@@ -34,17 +34,14 @@
                         </tr>
                     </thead>
 
-                    @foreach($numberOfParticipants as $participants)
-
                     <tbody>
-                        <tr class="bg-gray-50 text-center">
-                            <td class="p-2 border-r">
-                        </tr>
+                        @foreach($numberOfParticipants as $participants)
+                       
                         <tr class="bg-gray-100 text-center border-b text-xl text-gray-600">
-                            <td class="p-2 border-r">{{$participants->id}}</td>
-                            <td class="p-2 border-r">{{$participants->name}}</td>
-                            <td class="p-2 border-r">
-                                <div class="flex space-x-1 justify-center">
+                            <td class="p-2 border-r py-4">{{$participants->id}}</td>
+                            <td class="p-2 border-r py-4">{{$participants->name}}</td>
+                            <td class="p-2 border-r py-4">
+                                <div class="flex space-x-3 justify-center">
                                     <a href="{{ route('admin.numberOfParticipants.edit', $participants) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold  ">
                                         Modifier
                                     </a>
@@ -59,8 +56,8 @@
                                 </div>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
-                    @endforeach
 
                 </table>
             </div>
