@@ -93,11 +93,11 @@
                     <label class="mb-3 text-xl" for="is_Fix">Les dates sont :</label>
                     <span class="mb-3 text-xl">Fixe :</span>
                     @error('is_Fix')<span class="text-red-600">{{ $message }}</span>@enderror
-                    <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" id="fix" checked value="{{ old('is_Fix') }}">
+                    <input class="accent-custom-purple @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" id="fix" checked value="{{ old('is_Fix') }}">
 
                     <span class="mb-3 text-xl">Prévisionnel :</span>
                     @error('is_not_fix')<span class="text-red-600">{{ $message }}</span>@enderror
-                    <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" id="no-fix" value="{{ old('is_not_fix') }}">
+                    <input class="accent-custom-purple @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" id="no-fix" value="{{ old('is_not_fix') }}">
                 </div>
                 <div class="flex flex-col w-2/5 mr-8">
 

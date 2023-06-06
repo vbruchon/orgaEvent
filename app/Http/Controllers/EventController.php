@@ -20,8 +20,6 @@ class EventController extends Controller
      */
     public function index()
     {
-
-
         $events = Event::orderBy('date_start')->where('date_end', '>', now())->get();
         $dateStartToString = [];
         $dateStartToDays = [];
@@ -122,7 +120,7 @@ class EventController extends Controller
 
         $event->save();
 
-        return redirect()->route('dashboard')->with('success', 'Event created successfully');
+        return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien était créé');
     }
     /**
      * Display the specified resource.
@@ -181,7 +179,7 @@ class EventController extends Controller
             }
             $event->save();
 
-            return redirect()->route('userEvent.all')->with('success', 'Event created successfully');
+            return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien était modiifé');
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         }
@@ -217,7 +215,7 @@ class EventController extends Controller
 
         $query = $this->applyFilters($request);
 
-        $events = $query->get();
+        $events = $query->orderBy('date_start')->where('date_end', '>', now())->get();
 
         if (sizeof($events) < 1) {
             return view('event.list', [
