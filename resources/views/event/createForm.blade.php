@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Ajouter un événement') }}
         </h2>
     </x-slot>
     <main class="w-full">
@@ -11,8 +11,8 @@
         </a>
         <form action="{{ route('userEvent.add') }}" method="POST" class="bg-gray-100 block p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
             @csrf
-            <section class="relative border-2 border-custom-purple rounded-lg p-16 mb-12 ">
-                <h2 class="absolute top-0 left-8 bg-gray-100 px-3 py-1 mt-[-20px] text-custom-purple rounded-tl rounded-tr text-lg">Informations générales</h2>
+            <section class="relative border-2 border-custom-light-purple rounded-lg p-16 mb-12 ">
+                <h2 class="absolute top-0 left-8 bg-gray-100 px-3 py-1 mt-[-20px] text-custom-light-purple rounded-tl rounded-tr text-lg">Informations générales</h2>
 
                 <div class="flex flex-col mb-4">
                     <label class="mb-3 text-xl" for="name">Intitulé de l'événement :</label>
@@ -70,8 +70,8 @@
                     </div>
                 </div>
             </section>
-            <section class="relative border-2 border-custom-purple rounded-lg p-16 mb-12 ">
-                <h2 class="absolute top-0 left-8 bg-gray-100 px-3 py-1 mt-[-20px] text-custom-purple rounded-tl rounded-tr text-lg">Planification de l'événement</h2>
+            <section class="relative border-2 border-custom-light-purple rounded-lg p-16 mb-12 ">
+                <h2 class="absolute top-0 left-8 bg-gray-100 px-3 py-1 mt-[-20px] text-custom-light-purple rounded-tl rounded-tr text-lg">Planification de l'événement</h2>
                 <div class="flex flex-col w-2/5 mr-8">
                     <label class="mb-3 text-xl" for="location">Lieu de l'événement :</label>
                     @error('name')<span class="text-red-600">{{ $message }}</span>@enderror
@@ -93,11 +93,11 @@
                     <label class="mb-3 text-xl" for="is_Fix">Les dates sont :</label>
                     <span class="mb-3 text-xl">Fixe :</span>
                     @error('is_Fix')<span class="text-red-600">{{ $message }}</span>@enderror
-                    <input class="accent-custom-purple @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" id="fix" checked value="{{ old('is_Fix') }}">
+                    <input class="accent-custom-light-purple @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" id="fix" checked value="{{ old('is_Fix') }}">
 
                     <span class="mb-3 text-xl">Prévisionnel :</span>
                     @error('is_not_fix')<span class="text-red-600">{{ $message }}</span>@enderror
-                    <input class="accent-custom-purple @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" id="no-fix" value="{{ old('is_not_fix') }}">
+                    <input class="accent-custom-light-purple @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" id="no-fix" value="{{ old('is_not_fix') }}">
                 </div>
                 <div class="flex flex-col w-2/5 mr-8">
 
@@ -106,8 +106,8 @@
                     <input class="mb-6 h-8 border-2 border-grey-300 @error('hours_start') is-invalid @enderror" name="hours" type="text" value="{{ old('hours') }}">
                 </div>
             </section>
-            <section class="relative border-2 border-custom-purple rounded-lg p-16 mb-6 ">
-                <h2 class="absolute top-0 left-8 bg-gray-100 px-3 py-1 mt-[-20px] text-custom-purple rounded-tl rounded-tr text-lg">Informations Complémentaires</h2>
+            <section class="relative border-2 border-custom-light-purple rounded-lg p-16 mb-6 ">
+                <h2 class="absolute top-0 left-8 bg-gray-100 px-3 py-1 mt-[-20px] text-custom-light-purple rounded-tl rounded-tr text-lg">Informations Complémentaires</h2>
                 <label class="mb-3 text-xl" for="organizer_needs">Besoin de l'organisateur</label>
                 <textarea class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 w-full" id="" name="organizer_needs" cols="10" rows="5">{{ old('needs_organizer') }}</textarea>
             </section>

@@ -38,11 +38,12 @@
 
                 <tbody>
                     @foreach($structures as $structure)
-                    <tr class="bg-gray-50 text-center">
-                        <td class="p-2 border-r">{{ $structure->id }}</td>
-                        <td class="p-2 border-r">{{ $structure->name }}</td>
-                        <td class="p-2 border-r">
-                            <div class="flex space-x-1 justify-center">
+
+                    <tr class="bg-gray-100 text-center border-b text-xl text-gray-600">
+                        <td class="p-2 border-r py-4">{{ $structure->id }}</td>
+                        <td class="p-2 border-r py-4">{{ $structure->name }}</td>
+                        <td class="p-2 border-r py-4">
+                            <div class="flex space-x-3 justify-center">
                                 <a href="{{ route('admin.structure.edit', $structure) }}" class="bg-fuchsia-700 p-2 pl-3 pr-3 text-white hover:shadow-lg text-lg font-semibold">Modifier</a>
 
                                 <form method="post" action="{{ route('admin.structure.destroy', ['structure' => $structure->id]) }}">

@@ -200,6 +200,7 @@ class EventController extends Controller
         $user = Auth::user();
         $events = Event::where('user_id', '=', $user->id)->get();
 
+
         return view('event.mycontribution', ['events' => $events]);
     }
 

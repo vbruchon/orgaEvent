@@ -13,7 +13,7 @@
         <main class="w-full mt-10">
             <a href="{{ route('admin.status.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter un nouveau status</a>
             <div class="table w-full p-2 mt-8">
-            <table class="w-11/12 border mx-auto my-4">
+                <table class="w-11/12 border mx-auto my-4">
                     <thead>
                         <tr class="bg-gray-50 border-b">
                             <th class="p-2 border-r cursor-pointer text-xl font-thin text-gray-500">
@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                         @foreach($status as $s)
-                        
+
                         <tr class="bg-gray-100 text-center border-b text-xl text-gray-600">
                             <td class="p-2 border-r py-4">{{$s->id}}</td>
                             <td class="p-2 border-r py-4">{{$s->name}}</td>
