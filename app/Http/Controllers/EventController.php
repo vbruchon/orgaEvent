@@ -7,7 +7,6 @@ use App\Models\Event;
 use App\Models\NumberOfParticipants;
 use App\Models\Status;
 use App\Models\Structure;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
@@ -39,11 +38,15 @@ class EventController extends Controller
                 $dateEndToDays[$key] = $convertDateEndToDays;
             }
         }
-        $isAdmin = $this->checkUserAdmin();
+        $isAdmin = (new UserController)->checkUserAdmin();
 
         $structures = Structure::get();
         $status = Status::get();
         $numberOfParticipants = NumberOfParticipants::get();
+
+        $svgIcons = $this->createSvgArray();
+
+
         return view('event.list', [
             'events' => $events,
             'dateStartToString' => $dateStartToString,
@@ -52,7 +55,8 @@ class EventController extends Controller
             'isAdmin' => $isAdmin,
             'structures' => $structures,
             'status' => $status,
-            'numberOfParticipants' => $numberOfParticipants
+            'numberOfParticipants' => $numberOfParticipants,
+            'svg' => $svgIcons
         ]);
     }
 
@@ -81,29 +85,29 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'structure_id' => ['required', 'integer', 'exists:structures,id'],
-            'partners' => ['required', "string"],
             'name' => ['required', 'string', 'max:150'],
-            'description' => ['string'],
+            'structure_id' => ['required', 'integer', 'exists:structures,id'],
+            'partners' => ['nullable', 'string'],
+            'description' => ['required', 'string'],
             'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
             'number_of_participants_id' => ['required', 'string'],
             'location' => ['nullable', 'string'],
             'date_start' => ['required', 'date'],
             'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
-            'hours' => ['required', 'string'],
+            'hours' => ['nullable', 'string'],
             'organizer_needs' => ['nullable'],
         ];
         $validated = $request->validate($rules, [
-            'structure_id.required' => 'Le champs structure doit être définis',
-            'status_id.required' => 'Le champs status doit être définis',
-            'partners.required' => 'Le champs structure doit être définis',
             'name.required' => 'Le champ Nom est obligatoire.',
             'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
+            'structure_id.required' => 'Le champ Structure est obligatoire',
+            'description.required' => 'Le champ Description est obligatoire.',
+            'status_id.required' => 'Le champ status doit être définis',
             'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
             'date_start.required' => 'Le champ Date  de début est obligatoire.',
             'date_start.date' => 'Le champ Date de début doit être une date valide.',
             'date_end.date' => 'Le champ Date de fin doit être une date valide.',
-            'hours.required' => 'Le champ Heure de début est obligatoire.',
+            'date_end.after_pr_equal:date_start' => "Le champ date de fin ne peux pas être avant la date de début"
         ]);
 
         $event = new Event();
@@ -199,14 +203,15 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $events = Event::where('user_id', '=', $user->id)->get();
+        $svgIcons = $this->createSvgArray();
+        $isAdmin = (new UserController)->checkUserAdmin();
 
-
-        return view('event.mycontribution', ['events' => $events]);
+        return view('event.list', ['events' => $events, 'svg' =>$svgIcons, 'isAdmin' => $isAdmin]);
     }
 
     public function filteredEvents(Request $request)
     {
-        $isAdmin = $this->checkUserAdmin();
+        $isAdmin = (new UserController)->checkUserAdmin();
         $selectedStructure = $request->input('structure');
         $selectedStatus = $request->input('status');
         $selectedParticipant = $request->input('number_of_participants');
@@ -218,9 +223,11 @@ class EventController extends Controller
 
         $events = $query->orderBy('date_start')->where('date_end', '>', now())->get();
 
+
         if (sizeof($events) < 1) {
             return view('event.list', [
-                'events' => $events, 'isAdmin' => $isAdmin,
+                'events' => $events,
+                'isAdmin' => $isAdmin,
                 'structures' => $structures,
                 'status' => $status,
                 'numberOfParticipants' => $numberOfParticipants,
@@ -243,8 +250,10 @@ class EventController extends Controller
                     $dateEndToDays[$key] = $convertDateEndToDays;
                 }
             }
+            $svgIcons = $this->createSvgArray();
 
 
+            // Sinon, retourne la vue partielle des événements filtrés
             return view('event.list', [
                 'events' => $events,
                 'dateStartToString' => $dateStartToString,
@@ -257,6 +266,7 @@ class EventController extends Controller
                 'selectedStructure' => $selectedStructure,
                 'selectedStatus' => $selectedStatus,
                 'selectedParticipant' => $selectedParticipant,
+                'svg' => $svgIcons
             ]);
         }
     }
@@ -292,19 +302,21 @@ class EventController extends Controller
             }
         }
 
-        return $query;
-    }
-
-    private function checkUserAdmin()
-    {
-        if (Auth::check()) {
-            return Auth::user()->is_admin;
+        if ($request->filled('date_start')) {
+            $dateStartLabel = $request->input('date_start');
+            $query->whereDate('date_start', '>', $dateStartLabel);
         }
 
-        return false;
+
+        if ($request->filled('date_end')) {
+            $dateEndLabel = $request->input('date_end');
+            $query->whereDate('date_end', '<', $dateEndLabel);
+        }
+        
+
+
+        return $query;
     }
-
-
 
     public function convertDateToString($date)
     {
@@ -335,5 +347,47 @@ class EventController extends Controller
         $newDate = Carbon::parse($date);
 
         return ucwords($newDate->isoFormat('dddd D MMMM Y'));
+    }
+
+    function createSvgArray()
+    {
+        // Replace the path with the actual path to your SVG file
+        $structureSvgPath = public_path('image/structure-purple.svg');
+        $partnerSvgPath = public_path('image/partners-purple.svg');
+        $descriptionSvgPath = public_path('image/description.svg');
+        $statuSvgPath = public_path('image/status-purple.svg');
+        $participantsSvgPath = public_path('image/groups-purple.svg');
+        $dateSvgPath = public_path('image/date-purple.svg');
+        $needSvgPath = public_path('image/needs.svg');
+        $eventSvgPath = public_path('image/event.svg');
+
+        // Read the SVG file contents
+        $structureSvgContents = file_get_contents($structureSvgPath);
+        $structureSvg = str_replace('<svg', '<svg class="w-9 h-9"', $structureSvgContents);
+        $partnerSvgContents = file_get_contents($partnerSvgPath);
+        $partnerSvg = str_replace('<svg', '<svg class="w-9 h-9"', $partnerSvgContents);
+        $descriptionSvgContent = file_get_contents($descriptionSvgPath);
+        $descriptionSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $descriptionSvgContent);
+        $statuSvgContent = file_get_contents($statuSvgPath);
+        $statuSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $statuSvgContent);
+        $particpantSvgContent = file_get_contents($participantsSvgPath);
+        $particpantSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $particpantSvgContent);
+        $dateSvgContent = file_get_contents($dateSvgPath);
+        $dateSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $dateSvgContent);
+        $needSvgContent = file_get_contents($needSvgPath);
+        $needSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $needSvgContent);
+        $eventSvgContent = file_get_contents($eventSvgPath);
+        $eventSvg = str_replace('<svg', '<svg class="w-9 h-9"', $eventSvgContent);
+
+        return [
+            'structure' => $structureSvg,
+            'partners' => $partnerSvg,
+            'description' => $descriptionSvg,
+            'status' => $statuSvg,
+            'participants' => $particpantSvg,
+            'date' => $dateSvg,
+            'needs' => $needSvg,
+            'event' => $eventSvg
+        ];
     }
 }

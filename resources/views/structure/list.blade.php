@@ -12,7 +12,7 @@
         </div>
         @endif
 
-        <a href="{{ route('admin.structure.create') }}" class="ml-5 mb-3 text-xl text-white rounded-lg p-5 bg-fuchsia-900">Ajouter une nouvelle structure</a>
+        <x-custom-button route="admin.structure.create" content="Ajouter une nouvelle structure" />
 
         <div class="table w-full p-2 mt-8">
             <table class="w-11/12 border mx-auto my-4">

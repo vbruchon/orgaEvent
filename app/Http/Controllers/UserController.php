@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -70,5 +70,13 @@ class UserController extends Controller
     {
         $user->delete();
         return redirect()->route('admin.users.list')->with('success', 'L\'utilisateur a été supprimé avec succès !');
+    }
+
+    function checkUserAdmin()
+    {
+        if (Auth::check()) {
+            return Auth::user()->is_admin;
+        }
+        return false;
     }
 }

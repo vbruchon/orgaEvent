@@ -5,17 +5,32 @@
         </h2>
     </x-slot>
     @if (session('success'))
+    var successMessage = '{{ session('success') }}';
+    if (successMessage) {
     <div id="success-message" class="bg-green-400 p-6 text-center rounded shadow animate-movedown">
         {{ session('success') }}
     </div>
+    }
     @endif
-    <div class="w-full sticky z-50 top-12 opacity-100">
+    @if (Request::path() === 'dashboard/events')
+    <div class="mt-6">
+        <x-custom-button route="userEvent.my" content="Mes contributions" />
+        <x-custom-button route="userEvent.create" content="Ajouter un nouvel événement" />
+    </div>
+    <div class="w-full sticky z-50 top-20 opacity-100 mb-4">
         @if(isset($selectedStructure) || isset($selectedStatus) || isset($selectedParticipants))
         <x-filterbar :structures="$structures" :selectedStructure="isset($selectedStructure) ? $selectedStructure : ''" :status="$status" :selectedStatus="isset($selectedStatus) ? $selectedStatus : ''" :numberOfParticipants="$numberOfParticipants" :selectedParticipant="isset($selectedParticipant) ? $selectedParticipant : ''" :route="'userEvent.filter'" />
         @else
         <x-filterbar :structures="$structures" :status="$status" :numberOfParticipants="$numberOfParticipants" route="userEvent.filter" />
         @endif
     </div>
+    @else
+    <div class="mt-6">
+        <x-custom-button route="userEvent.all" content="Retourner aux événements" />
+    </div>
+    @endif
+
+
 
 
     <section id="events" class="w-5/6 mx-auto">
@@ -35,38 +50,47 @@
                 <div class="p-8 border-2 w-80 mt-16 mb-6 mx-auto">
                     <p class="p-8 font-semibold text-3xl text-custom-blue">{{$event->name}}</p>
                     <div class="flex mb-5  items-center">
+                        @if($event->structure->name)
                         <x-event-item :svg="$svg['structure']" :label="$event->structure->name" />
+                        @endif
+                        @if($event->partners)
                         <x-event-item :svg="$svg['partners']" :label="$event->partners" />
+                        @endif
                     </div>
-
+                    @if($event->description)
                     <x-event-item :svg="$svg['description']" :label="$event->description" />
+                    @endif
+                    @if($event->status->name)
                     <x-event-item :svg="$svg['status']" :label="$event->status->name" />
-
+                    @endif
+                    @if($event->number_of_participants->name)
                     <x-event-item :svg="$svg['participants']" :label="$event->number_of_participants->name" />
-
+                    @endif
+                    @if($event->date_start)
                     <div class="flex mb-5  items-center">
                         {!! $svg['date'] !!}
-
                         <p class="p-2 text-lg text-custom-blue font-semibold">{{$event->date_start}}</p>
                         @if($event->date_end !== $event->date_start)
                         <p class="p-2 text-lg text-custom-blue font-semibold">{{$event->date_end}}</p>
                         @endif
                         <p class="p-2 text-lg text-custom-blue font-semibold">{{$event->hours}}</p>
                     </div>
+                    @endif
+                    @if($event->organizer_needs)
                     <div class="flex mb-5  items-center">
                         {!! $svg['needs'] !!}
-
                         <p class="italic text-custom-blue">{{$event->organizer_needs}}</p>
                     </div>
+                    @endif
                     @if($isAdmin || $event->user_id == Auth::id())
                     <div class="flex flex-nowrap justify-end space-x-1 ">
-                        <a href="{{ route('userEvent.edit', $event) }}" class="bg-custom-blue p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
+                        <a href="{{ route('userEvent.edit', $event) }}" class="transition duration-300 transform hover:scale-110 bg-custom-blue p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
                             Modifier
                         </a>
                         <form id="deleteForm" method="post" action="{{ route('userEvent.destroy', $event->id) }}">
                             @csrf
                             @method('delete')
-                            <button type="button" class="bg-red-600 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold delete-button" data-target="#confirmDeleteModal">
+                            <button type="button" class="transition duration-300 transform hover:scale-110 bg-red-600 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold delete-button" data-target="#confirmDeleteModal">
                                 Supprimer
                             </button>
                         </form>
@@ -92,7 +116,7 @@
 
                 @isset($dateStart)
                 <p class="absolute top-0 left-0 p-2 text-custom-blue font-medium">{{ $dateStart }}</p>
-                <hr class="absolute top-10 left-4 p-2 w-1/15 border-custom-blue">
+                <hr class="absolute top-10 left-10 p-2 w-1/15 border-custom-blue">
                 @endisset
                 @endforeach
             </div>
@@ -100,13 +124,13 @@
         </div>
     </section>
     <script>
-        let sucessMessage = document.getElementById('success-message');
+        if (document.getElementById('sucess-message')) {
+            let sucessMessage = document.getElementById('success-message');
 
-        setTimeout(() => {
-            sucessMessage.classList.add('hidden');
-        }, 5000);
-
-        
+            setTimeout(() => {
+                sucessMessage.classList.add('hidden');
+            }, 5000);
+        }
     </script>
     <script src="{{ asset('js/deleteModal.js') }}"></script>
 </x-app-layout>

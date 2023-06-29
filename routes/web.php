@@ -5,9 +5,9 @@ use App\Http\Controllers\NumberOfParticipantsController;
 use App\Http\Controllers\ProfileController,
     App\Http\Controllers\EventController,
     App\Http\Controllers\StatusController,
-    App\Http\Controllers\StructureController;
+    App\Http\Controllers\StructureController,
+    App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-use Barryvdh\Debugbar\DataCollector\EventCollector;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login');
 
 Route::middleware('auth')->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('/dashboard')->group(function () {
         Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');

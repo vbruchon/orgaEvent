@@ -12,9 +12,9 @@
 
                 @if ($link['label'] === 'Mon profile')
             <li>
-                <hr class="mt-6 mb-4 border-gray-300 dark:border-gray-700">
+                <hr class="mt-6 mb-4 border-gray-200">
             </li>
-            @endif 
+            @endif
 
 
             @if ($link['label'] === 'Déconnexion')
@@ -26,13 +26,14 @@
                 </x-nav-link>
             </form>
             @else
-            @if ($link['label'] === 'Mon profile')
 
-            @endif
-            <x-nav-link :href="$link['url']" :active="request()->routeIs($link['url'])" class="w-full flex items-center px-2 py-2 rounded-lg text-white hover:bg-custom-blue">
+            <a href="{{ $link['url'] }}" class="nav-item w-full flex items-center px-2 py-2 rounded-lg text-white hover:bg-custom-blue hover:border-b-4" data-url="{{ $link['url'] }}">
                 {!! $link['svg'] !!}
                 <span class="ml-3">{{ $link['label'] }}</span>
-            </x-nav-link>
+            </a>
+
+
+
             </li>
             @endif
 
@@ -41,3 +42,39 @@
         </ul>
     </div>
 </aside>
+<script>
+    /*     const currentUrl = window.location.pathname;
+    console.log(currentUrl);
+    const linkElements = document.querySelectorAll('.nav-item');
+
+    linkElements.forEach(linkElement => {
+        const linkUrl = linkElement.href;
+        const urlSegments = linkUrl.split('/dashboard');
+
+
+        // Vérifier si le dernier segment de l'URL est inclus dans currentUrl
+        if (currentUrl === "/dashboard" && urlSegments[urlSegments.length - 1] === "") {
+            linkElement.classList.add('bg-custom-blue');
+            linkElement.classList.add('border-b-4');
+        } else if (currentUrl.includes(urlSegments[urlSegments.length - 1])) {
+            linkElement.classList.add('bg-custom-blue');
+            linkElement.classList.add('border-b-4');
+        }
+    }); */
+
+    const currentUrl = window.location.pathname;
+    console.log(currentUrl);
+    const linkElements = document.querySelectorAll('.nav-item');
+
+    linkElements.forEach(linkElement => {
+        const linkUrl = linkElement.href;
+        //Create instance URL by complete url and extract pathname access of URL
+        const linkPathname = new URL(linkUrl).pathname;
+
+        // Vérifier si l'URL de la page correspond à l'URL du lien
+        if (currentUrl === linkPathname) {
+            linkElement.classList.add('bg-custom-blue');
+            linkElement.classList.add('border-b-4');
+        }
+    });
+</script>

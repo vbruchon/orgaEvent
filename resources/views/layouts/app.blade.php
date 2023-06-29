@@ -16,7 +16,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased bg-gray-100">
     <!-- Page Heading -->
     @if (isset($header))
     <header class="bg-white shadow fixed z-50 top-0 left-0 w-full">
@@ -25,7 +25,7 @@
         </div>
     </header>
     @endif
-    
+
     <div class="flex">
         <aside class="h-screen w-sidebar" aria-label="Sidebar">
             @include('layouts.navdashboard')
@@ -36,18 +36,8 @@
             {{ $slot }}
         </main>
     </div>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.2/dist/cdn.min.js"></script>
 </body>
 
 </html>
 
-
-
-
-<!-- Le contenu de votre barre de navigation -->
-
-<main class="ml-1/5">
-    <!-- Page Heading -->
-    <!-- Page Content -->
-</main>
-</div>
-</body>
