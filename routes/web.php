@@ -81,6 +81,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/{event}/update', [EventController::class, 'update'])->name('update');
             Route::delete('/{event}/destroy', [EventController::class, 'destroy'])->name('destroy');
         });
+        Route::get('/export', [EventController::class, 'export'])->name('exportEvenetIcs');
     });
 });
 

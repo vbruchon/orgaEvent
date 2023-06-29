@@ -7,13 +7,43 @@ use App\Models\Event;
 use App\Models\NumberOfParticipants;
 use App\Models\Status;
 use App\Models\Structure;
+//use App\Services\EventExportFileService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
-
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event as IcalendarEvent;
 
 class EventController extends Controller
 {
+    public function export()
+    {
+        // Récupérez les données de vos événements depuis votre modèle Event
+        $events = Event::all();
+
+        // Créez un nouveau calendrier
+        $calendar = Calendar::create('Archimède Event to Calendar');
+
+        // Ajoutez chaque événement au calendrier
+        foreach ($events as $event) {
+            $calendar->event(
+                IcalendarEvent::create()
+                    ->name($event->name)
+                    ->startsAt(Carbon::parse($event->date_start))
+                    ->endsAt(Carbon::parse($event->date_end))
+            );
+        }
+
+
+        // Générez le contenu du fichier iCalendar
+        $content = $calendar->get();
+
+        // Renvoyez le fichier iCalendar en réponse
+        return response($content)
+            ->header('Content-Type', 'text/calendar')
+            ->header('Content-Disposition', 'attachment; filename="events.ics"');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -206,7 +236,7 @@ class EventController extends Controller
         $svgIcons = $this->createSvgArray();
         $isAdmin = (new UserController)->checkUserAdmin();
 
-        return view('event.list', ['events' => $events, 'svg' =>$svgIcons, 'isAdmin' => $isAdmin]);
+        return view('event.list', ['events' => $events, 'svg' => $svgIcons, 'isAdmin' => $isAdmin]);
     }
 
     public function filteredEvents(Request $request)
@@ -312,7 +342,7 @@ class EventController extends Controller
             $dateEndLabel = $request->input('date_end');
             $query->whereDate('date_end', '<', $dateEndLabel);
         }
-        
+
 
 
         return $query;
