@@ -68,7 +68,14 @@ class EventController extends Controller
      */
     public function index(DateConversionService $dateConversion, CreateSVGArray $svg)
     {
-        $events = Event::orderBy('date_start')->where('date_start', '>=', now())->get();
+        $events = Event::with('structure', 'status', 'number_of_participants')
+            ->where('date_start', '>=', '2023-06-30 10:35:45')
+            ->has('structure')
+            ->has('status')
+            ->has('number_of_participants')
+            ->orderBy('date_start', 'asc')
+            ->get();
+
         $dateStartToString = [];
         $dateStartToDays = [];
         $dateEndToDays = [];
@@ -176,7 +183,7 @@ class EventController extends Controller
 
 
 
-    
+
     public function userContribution()
     {
         $user = Auth::user();

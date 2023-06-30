@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight ml-4">
             {{ __('Liste des événements') }}
         </h2>
     </x-slot>
@@ -13,11 +13,11 @@
     }
     @endif
     @if (Request::path() === 'dashboard/events')
-    <div class="mt-6">
+    <div class="mt-6 ml-4">
         <x-custom-button route="userEvent.my" content="Mes contributions" />
         <x-custom-button route="userEvent.create" content="Ajouter un nouvel événement" />
     </div>
-    <div class="w-full sticky z-50 top-20 opacity-100 mb-4">
+    <div class="w-full sticky z-50 top-20 opacity-100 mb-4 ml-4">
         @if(isset($selectedStructure) || isset($selectedStatus) || isset($selectedParticipants))
         <x-filterbar :structures="$structures" :selectedStructure="isset($selectedStructure) ? $selectedStructure : ''" :status="$status" :selectedStatus="isset($selectedStatus) ? $selectedStatus : ''" :numberOfParticipants="$numberOfParticipants" :selectedParticipant="isset($selectedParticipant) ? $selectedParticipant : ''" :route="'userEvent.filter'" />
         @else
@@ -25,7 +25,7 @@
         @endif
     </div>
     @else
-    <div class="mt-6">
+    <div class="mt-6 ml-4">
         <x-custom-button route="userEvent.all" content="Retourner aux événements" />
     </div>
     @endif
@@ -49,23 +49,39 @@
                 @endif
                 <div class="p-8 border-2 w-80 mt-16 mb-6 mx-auto">
                     <p class="p-8 font-semibold text-3xl text-custom-blue">{{$event->name}}</p>
-                    <div class="flex mb-5  items-center">
-                        @if($event->structure->name)
-                        <x-event-item :svg="$svg['structure']" :label="$event->structure->name" />
+                    <div class="flex mb-5 items-center">
+                        @if ($event->structure->name)
+                        <div class="flex mb-5 items-center">
+                            {!! $svg['structure'] !!}
+                            <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->structure->name }}</p>
+                        </div>
                         @endif
-                        @if($event->partners)
-                        <x-event-item :svg="$svg['partners']" :label="$event->partners" />
+                        @if ($event->partners)
+                        <div class="flex mb-5 items-center">
+                            {!! $svg['partners'] !!}
+                            <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->partners }}</p>
+                        </div>
                         @endif
                     </div>
-                    @if($event->description)
-                    <x-event-item :svg="$svg['description']" :label="$event->description" />
+                    @if ($event->description)
+                    <div class="flex mb-5 items-center">
+                        {!! $svg['description'] !!}
+                        <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->description }}</p>
+                    </div>
                     @endif
-                    @if($event->status->name)
-                    <x-event-item :svg="$svg['status']" :label="$event->status->name" />
+                    @if ($event->status->name)
+                    <div class="flex mb-5 items-center">
+                        {!! $svg['status'] !!}
+                        <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->status->name }}</p>
+                    </div>
                     @endif
-                    @if($event->number_of_participants->name)
-                    <x-event-item :svg="$svg['participants']" :label="$event->number_of_participants->name" />
+                    @if ($event->number_of_participants->name)
+                    <div class="flex mb-5 items-center">
+                        {!! $svg['participants'] !!}
+                        <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->number_of_participants->name }}</p>
+                    </div>
                     @endif
+
                     @if($event->date_start)
                     <div class="flex mb-5  items-center">
                         {!! $svg['date'] !!}
