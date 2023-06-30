@@ -7,49 +7,68 @@ use App\Models\Event;
 use App\Models\NumberOfParticipants;
 use App\Models\Status;
 use App\Models\Structure;
-//use App\Services\EventExportFileService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event as IcalendarEvent;
+use App\Services\EventExportFileService;
+use App\Services\CreateSVGArray;
+use App\Services\DateConversionService;
+
+
 
 class EventController extends Controller
 {
-    public function export()
+    /**
+     * Validate the event data.
+     */
+    private function validateEvent(Request $request)
     {
-        // Récupérez les données de vos événements depuis votre modèle Event
-        $events = Event::all();
-
-        // Créez un nouveau calendrier
-        $calendar = Calendar::create('Archimède Event to Calendar');
-
-        // Ajoutez chaque événement au calendrier
-        foreach ($events as $event) {
-            $calendar->event(
-                IcalendarEvent::create()
-                    ->name($event->name)
-                    ->startsAt(Carbon::parse($event->date_start))
-                    ->endsAt(Carbon::parse($event->date_end))
-            );
+        return $request->validate([
+            'structure_id' => ['required', 'integer', 'exists:structures,id'],
+            'partners' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:150'],
+            'description' => ['string'],
+            'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
+            'number_of_participants_id' => ['required', 'string'],
+            'location' => ['nullable', 'string'],
+            'date_start' => ['required', 'date'],
+            'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
+            'hours' => ['required', 'string'],
+            'organizer_needs' => ['nullable'],
+        ], [
+            'structure_id.required' => 'Le champ Structure est obligatoire',
+            'partners.required' => 'Le champ Partenaires est obligatoire',
+            'name.required' => 'Le champ Nom est obligatoire.',
+            'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
+            'number_of_participants_id.required' => 'Le champ Nombre de participants est obligatoire.',
+            'date_start.required' => 'Le champ Date de début est obligatoire.',
+            'date_start.date' => 'Le champ Date de début doit être une date valide.',
+            'date_end.date' => 'Le champ Date de fin doit être une date valide.',
+            'hours.required' => 'Le champ Heure de début est obligatoire.',
+        ]);
+    }
+    /**
+     * Fill the event fields with the validated data.
+     */
+    private function fillEventFields(Event $event, array $validated)
+    {
+        foreach ($validated as $field => $value) {
+            if ($field === 'date_end' && $value === null) {
+                $event->date_end = $event->date_start;
+            } else {
+                $event->{$field} = $value;
+            }
         }
-
-
-        // Générez le contenu du fichier iCalendar
-        $content = $calendar->get();
-
-        // Renvoyez le fichier iCalendar en réponse
-        return response($content)
-            ->header('Content-Type', 'text/calendar')
-            ->header('Content-Disposition', 'attachment; filename="events.ics"');
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(DateConversionService $dateConversion, CreateSVGArray $svg)
     {
-        $events = Event::orderBy('date_start')->where('date_end', '>', now())->get();
+        $events = Event::orderBy('date_start')->where('date_start', '>=', now())->get();
         $dateStartToString = [];
         $dateStartToDays = [];
         $dateEndToDays = [];
@@ -57,14 +76,14 @@ class EventController extends Controller
         foreach ($events as $event) {
             $key = $event->id;
 
-            $convertDateStartToString = $this->convertDateToString($event->date_start);
+            $convertDateStartToString = $dateConversion->convertDateToString($event->date_start);
             $dateStartToString[$key] = $convertDateStartToString;
 
-            $convertDateStartToDays = $this->convertDateToDays($event->date_start);
+            $convertDateStartToDays = $dateConversion->convertDateToDays($event->date_start);
             $dateStartToDays[$key] = $convertDateStartToDays;
 
             if (isset($event->date_end)) {
-                $convertDateEndToDays = $this->convertDateToDays($event->date_end);
+                $convertDateEndToDays = $dateConversion->convertDateToDays($event->date_end);
                 $dateEndToDays[$key] = $convertDateEndToDays;
             }
         }
@@ -74,7 +93,7 @@ class EventController extends Controller
         $status = Status::get();
         $numberOfParticipants = NumberOfParticipants::get();
 
-        $svgIcons = $this->createSvgArray();
+        $svgIcons = $svg->createSvgArray();
 
 
         return view('event.list', [
@@ -103,65 +122,19 @@ class EventController extends Controller
     }
 
     /**
-     * Validate and add data in db
-     */
-    public function addEvent(Event $event, Request $request)
-    {
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name' => ['required', 'string', 'max:150'],
-            'structure_id' => ['required', 'integer', 'exists:structures,id'],
-            'partners' => ['nullable', 'string'],
-            'description' => ['required', 'string'],
-            'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
-            'number_of_participants_id' => ['required', 'string'],
-            'location' => ['nullable', 'string'],
-            'date_start' => ['required', 'date'],
-            'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
-            'hours' => ['nullable', 'string'],
-            'organizer_needs' => ['nullable'],
-        ];
-        $validated = $request->validate($rules, [
-            'name.required' => 'Le champ Nom est obligatoire.',
-            'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
-            'structure_id.required' => 'Le champ Structure est obligatoire',
-            'description.required' => 'Le champ Description est obligatoire.',
-            'status_id.required' => 'Le champ status doit être définis',
-            'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
-            'date_start.required' => 'Le champ Date  de début est obligatoire.',
-            'date_start.date' => 'Le champ Date de début doit être une date valide.',
-            'date_end.date' => 'Le champ Date de fin doit être une date valide.',
-            'date_end.after_pr_equal:date_start' => "Le champ date de fin ne peux pas être avant la date de début"
-        ]);
+        $validated = $this->validateEvent($request);
 
         $event = new Event();
-
-        foreach ($validated as $field => $value) {
-            if ($field === "date_end" && $value === null) {
-                $event->date_end = $event->date_start;
-            } else {
-                $event->{$field} = $value;
-            }
-        }
-        $event->is_Fix = $request->has('is_Fix'); //Check if checkbox is_Fix is checked
+        $this->fillEventFields($event, $validated);
+        $event->is_Fix = $request->has('is_Fix');
         $event->user_id = Auth::user()->id;
-
         $event->save();
 
-        return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien était créé');
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(Event $event)
-    {
-        //
+        return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien été créé');
     }
 
     /**
@@ -182,41 +155,12 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        $rules = [
-            'structure_id' => ['required', 'integer', 'exists:structures,id'],
-            'partners' => ['required', "string"],
-            'name' => ['required', 'string', 'max:150'],
-            'description' => ['string'],
-            'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
-            'number_of_participants_id' => ['required', 'string'],
-            'location' => ['nullable', 'string'],
-            'date_start' => ['required', 'date'],
-            'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
-            'hours' => ['required', 'string'],
-            'organizer_needs' => ['nullable'],
-        ];
-        try {
-            $validated = $request->validate($rules, [
-                'structure_id.required' => 'Le champs structure doit être définis',
-                'status_id.required' => 'Le champs status doit être définis',
-                'partners.required' => 'Le champs structure doit être définis',
-                'name.required' => 'Le champ Nom est obligatoire.',
-                'name.max' => 'Le champ Nom ne doit pas dépasser 150 caractères.',
-                'number_of_participants.required' => 'Le champ Nombre de participants est obligatoire.',
-                'date_start.required' => 'Le champ Date  de début est obligatoire.',
-                'date_start.date' => 'Le champ Date de début doit être une date valide.',
-                'date_end.date' => 'Le champ Date de fin doit être une date valide.',
-                'hours.required' => 'Le champ Heure de début est obligatoire.',
-            ]);
-            foreach ($validated as $field => $value) {
-                $event->{$field} = $value;
-            }
-            $event->save();
+        $validated = $this->validateEvent($request);
 
-            return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien était modiifé');
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
-        }
+        $this->fillEventFields($event, $validated);
+        $event->save();
+
+        return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien été modifié');
     }
 
     /**
@@ -229,6 +173,10 @@ class EventController extends Controller
         return redirect()->route('userEvent.all')->with('message', "L'événement a bien été supprimé");
     }
 
+
+
+
+    
     public function userContribution()
     {
         $user = Auth::user();
@@ -348,76 +296,17 @@ class EventController extends Controller
         return $query;
     }
 
-    public function convertDateToString($date)
+    public function export(EventExportFileService $exportFileService)
     {
-        $newDate = Carbon::parse($date);
-        $now = Carbon::now();
-        $diffInDays = $now->diffInDays($newDate, false);
-        $diffInHumans = $now->diffForHumans($newDate);
+        // Récupérez les données de vos événements depuis votre modèle Event
+        $events = Event::all();
 
-        if ($diffInDays > 365) {
-            $diffInYears = floor($diffInDays / 365);
-            $phrase = 'Dans ' . $diffInYears . ' an(s)';
-        } elseif ($diffInDays > 30) {
-            $diffInMonths = floor($diffInDays / 30);
-            $phrase = 'Dans ' . $diffInMonths . ' mois';
-        } elseif ($diffInDays > 0) {
-            $phrase = 'Dans ' . $diffInDays . ' jour(s)';
-        } elseif ($diffInDays === 0) {
-            $phrase = 'Demain';
-        } else {
-            $phrase = $diffInHumans;
-        }
+        // Utilisez le service pour exporter les événements
+        $icsData = $exportFileService->exportToICS($events);
 
-        return $phrase;
-    }
-
-    public function convertDateToDays($date)
-    {
-        $newDate = Carbon::parse($date);
-
-        return ucwords($newDate->isoFormat('dddd D MMMM Y'));
-    }
-
-    function createSvgArray()
-    {
-        // Replace the path with the actual path to your SVG file
-        $structureSvgPath = public_path('image/structure-purple.svg');
-        $partnerSvgPath = public_path('image/partners-purple.svg');
-        $descriptionSvgPath = public_path('image/description.svg');
-        $statuSvgPath = public_path('image/status-purple.svg');
-        $participantsSvgPath = public_path('image/groups-purple.svg');
-        $dateSvgPath = public_path('image/date-purple.svg');
-        $needSvgPath = public_path('image/needs.svg');
-        $eventSvgPath = public_path('image/event.svg');
-
-        // Read the SVG file contents
-        $structureSvgContents = file_get_contents($structureSvgPath);
-        $structureSvg = str_replace('<svg', '<svg class="w-9 h-9"', $structureSvgContents);
-        $partnerSvgContents = file_get_contents($partnerSvgPath);
-        $partnerSvg = str_replace('<svg', '<svg class="w-9 h-9"', $partnerSvgContents);
-        $descriptionSvgContent = file_get_contents($descriptionSvgPath);
-        $descriptionSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $descriptionSvgContent);
-        $statuSvgContent = file_get_contents($statuSvgPath);
-        $statuSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $statuSvgContent);
-        $particpantSvgContent = file_get_contents($participantsSvgPath);
-        $particpantSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $particpantSvgContent);
-        $dateSvgContent = file_get_contents($dateSvgPath);
-        $dateSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $dateSvgContent);
-        $needSvgContent = file_get_contents($needSvgPath);
-        $needSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $needSvgContent);
-        $eventSvgContent = file_get_contents($eventSvgPath);
-        $eventSvg = str_replace('<svg', '<svg class="w-9 h-9"', $eventSvgContent);
-
-        return [
-            'structure' => $structureSvg,
-            'partners' => $partnerSvg,
-            'description' => $descriptionSvg,
-            'status' => $statuSvg,
-            'participants' => $particpantSvg,
-            'date' => $dateSvg,
-            'needs' => $needSvg,
-            'event' => $eventSvg
-        ];
+        // Faites quelque chose avec les données ICS, par exemple : télécharger le fichier
+        return response($icsData)
+            ->header('Content-Type', 'text/calendar')
+            ->header('Content-Disposition', 'attachment; filename="events.ics"');
     }
 }
