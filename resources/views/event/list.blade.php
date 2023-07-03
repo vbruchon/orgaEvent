@@ -47,6 +47,9 @@
                 $dateStart = $dateStartToString[$event->id];
                 @endphp
                 @endif
+                @if($event->is_Fix === 0)
+                <img src="{{asset('image/badge.png')}}" alt="" class="w-1/6 absolute top-8 right-10">
+                @endif
                 <div class="p-8 border-2 w-80 mt-16 mb-6 mx-auto">
                     <p class="p-8 font-semibold text-3xl text-custom-blue">{{$event->name}}</p>
                     <div class="flex mb-5 items-center">
@@ -69,7 +72,7 @@
                         <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->description }}</p>
                     </div>
                     @endif
-                    
+
                     @if ($event->number_of_participants->name)
                     <div class="flex mb-5 items-center">
                         {!! $svg['participants'] !!}

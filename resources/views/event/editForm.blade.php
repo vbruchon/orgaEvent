@@ -14,17 +14,6 @@
     <a href="{{route('userEvent.all')}}" class="w-1/6 mb-3 block ms-8 text-xl text-center text-white rounded-lg p-2.5 bg-fuchsia-900 transition duration-300 transform hover:scale-105">
         Retourner aux événements
     </a>
-
-    @if ($errors->any())
-    <div class="bg-red-400 p-6 text-center m-6 rounded shadow border border-red-800 animate-ping">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-
     <form method="post" action="{{route('userEvent.update', $event)}}" class="bg-gray-100 block p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
         @csrf
         @method('put')
@@ -57,18 +46,6 @@
                 <textarea class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2" name="description" id="" cols="10" rows="1">{{ $event->description }}</textarea>
             </div>
             <div class="w-full flex place-content-between mb-4">
-                <div class="flex flex-col w-2/5 mr-8">
-                    <label class="mb-3 text-xl" for="status_id">Etat d'avancement</label>
-                    @error('status')<span class="text-red-600">{{ $message }}</span>@enderror
-                    <select class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2.5 @error('status') is-invalid @enderror" name="status_id" id="">
-                        <option value="{{ old('status_id', $event->status_id) }}" selected hidden>{{ $event->status->name }}</option>
-                        @if($status->count() > 0)
-                        @foreach($status as $state)
-                        <option value="{{ $state->id }}">{{ $state->name }}</option>
-                        @endforeach
-                        @endif
-                    </select>
-                </div>
                 <div class="flex flex-col w-3/5 mr-8 mb-4">
                     <label class="mb-3 text-xl" for="number_of_participants_id">Nombre de personnes présentes estimé</label>
                     @error('nbre_people')<span class="text-red-600">{{ $message }}</span>@enderror
@@ -132,7 +109,6 @@
         <input class="w-1/5 mb-3 cursor-pointer block mx-auto text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900 transition duration-300 transform hover:scale-105" type="submit" value="Envoyer">
     </form>
     <script>
-
         var previsionnelCheckbox = document.getElementById("no-fix");
         var fixCheckbox = document.getElementById("fix");
 
@@ -151,6 +127,5 @@
                 previsionnelCheckbox.checked = true;
             }
         });
-        
     </script>
 </x-app-layout>

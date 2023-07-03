@@ -10,7 +10,7 @@
             <li class="w-full">
                 @endif
 
-                @if ($link['label'] === 'Mon profile')
+                @if ($link['label'] === 'Mon profil')
             <li>
                 <hr class="mt-6 mb-4 border-gray-200">
             </li>

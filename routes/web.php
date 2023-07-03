@@ -45,15 +45,6 @@ Route::middleware('auth')->group(function () {
                 Route::delete('/{structure}/destroy', [StructureController::class, 'destroy'])->name('destroy');
             });
 
-            Route::prefix('status')->name('admin.status.')->group(function () {
-                Route::get('/', [StatusController::class, 'index'])->name('list');
-                Route::get('/create', [StatusController::class, 'create'])->name('create');
-                Route::post('/store', [StatusController::class, 'store'])->name('store');
-                Route::get('/{status}/edit', [StatusController::class, 'edit'])->name('edit');
-                Route::put('/{status}/update', [StatusController::class, 'update'])->name('update');
-                Route::delete('/{status}/destroy', [StatusController::class, 'destroy'])->name('destroy');
-            });
-
             Route::prefix('users')->name('admin.users.')->group(function () {
                 Route::get('/', [UserController::class, "index"])->name('list');
                 Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');

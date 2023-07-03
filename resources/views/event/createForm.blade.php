@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="ml-6 font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Ajouter un événement') }}
         </h2>
     </x-slot>
     <main class="w-full">
 
-        <div class="mt-6 ">
+        <div class="ml-6 mt-6 ">
             <x-custom-button route="userEvent.all" content="Retourner aux événements" />
         </div>
 
@@ -68,22 +68,22 @@
                     <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 mb-6" name="location" type="text" value="{{ old('location') }}" placeholder="Veuillez renseigner le lieu de l'événement">
                 </div>
 
-                <div class="w-2/5 flex place-content-between mb-4">
+                <div class="w-1/2 flex place-content-between mb-4">
                     <label class="mb-3 text-xl" for="is_Fix">Les dates sont <span class="text-red-600">*</span> :</label>
-                    <span class="mb-3 text-xl">Fixe :</span>
-                    <input class="accent-custom-light-purple @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" id="fix" checked value="{{ old('is_Fix') }}">
+                    <span class="mb-3 text-xl">Fixes :</span>
+                    <input class="accent-custom-light-purple -mt-2 @error('is_Fix') is-invalid @enderror" name="is_Fix" type="checkbox" id="fix" checked value="{{ old('is_Fix') }}">
                     @error('is_Fix')<span class="text-red-600">{{ $message }}</span>@enderror
 
-                    <span class="mb-3 text-xl">Prévisionnel :</span>
-                    <input class="accent-custom-light-purple @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" id="no-fix" value="{{ old('is_not_fix') }}">
+                    <span class="mb-3 text-xl">Prévisionnelles :</span>
+                    <input class="accent-custom-light-purple -mt-2 @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" id="no-fix" value="{{ old('is_not_fix') }}">
                     @error('is_not_fix')<span class="text-red-600">{{ $message }}</span>@enderror
                 </div>
 
-                <div id="is_fix">
-                    <p>Veuillez sélectionner la date de début et la date de fin de l'événement.</p>
+                <div id="is_fix" class="mb-8">
+                    <p class="italic">Veuillez sélectionner la date de début et la date de fin de l'événement.</p>
                 </div>
-                <div id="is_not_fix">
-                    <p>Veuillez indiquer la période durant laquelle l'événement se déroulera.</p>
+                <div id="is_not_fix" class="mb-8">
+                    <p class="italic">Veuillez indiquer la période durant laquelle l'événement se déroulera.</p>
                 </div>
 
                 <div id="date" class="w-full flex mb-6">
@@ -136,24 +136,35 @@
         });
         // Récupérer les références des éléments HTML
         var fixCheckbox = document.getElementById('fix');
-        var NotFixCheckbox = document.getElementById('no-fix');
+        var notFixCheckbox = document.getElementById('no-fix');
         var isFixDiv = document.getElementById('is_fix');
         var isNotFixDiv = document.getElementById('is_not_fix');
 
-        // Fonction pour afficher/masquer les div en fonction de l'état de la case à cocher
+        // Fonction pour afficher/masquer les div en fonction de l'état des cases à cocher
         function toggleDivVisibility() {
             if (fixCheckbox.checked) {
                 isFixDiv.style.display = 'block';
                 isNotFixDiv.style.display = 'none';
-            } else {
+            } else if (notFixCheckbox.checked) {
                 isFixDiv.style.display = 'none';
                 isNotFixDiv.style.display = 'block';
+            } else {
+                isFixDiv.style.display = 'none';
+                isNotFixDiv.style.display = 'none';
             }
         }
 
+        // Appeler la fonction pour définir l'état initial des div
+        toggleDivVisibility();
+
+        // Ajouter des écouteurs d'événements pour les clics sur les cases à cocher
+        fixCheckbox.addEventListener('click', toggleDivVisibility);
+        notFixCheckbox.addEventListener('click', toggleDivVisibility);
+/* 
+
         // Appeler la fonction lors du chargement de la page et lorsque la case à cocher est modifiée
         window.addEventListener('load', toggleDivVisibility);
-        fixCheckbox.addEventListener('change', toggleDivVisibility);
+        fixCheckbox.addEventListener('change', toggleDivVisibility); */
     </script>
 </x-app-layout>
 
