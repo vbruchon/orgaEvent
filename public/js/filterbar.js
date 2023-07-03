@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formElements = [
         document.getElementById('structure'),
-        document.getElementById('status'),
+        //document.getElementById('status'),
         document.getElementById('participants'),
         document.getElementById('date_start'),
         document.getElementById('date_end')

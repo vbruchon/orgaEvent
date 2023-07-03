@@ -25,7 +25,6 @@ return new class extends Migration
             $table->text('organizer_needs')->nullable();
 
             $table->foreignId('structure_id');
-            $table->foreignId('status_id');
             $table->foreignId('number_of_participants_id', 100);
             $table->foreignId('user_id');
         });

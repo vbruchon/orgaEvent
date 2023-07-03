@@ -16,7 +16,6 @@ class createSVGArray
         $structureSvgPath = public_path('image/structure-purple.svg');
         $partnerSvgPath = public_path('image/partners-purple.svg');
         $descriptionSvgPath = public_path('image/description.svg');
-        $statuSvgPath = public_path('image/status-purple.svg');
         $participantsSvgPath = public_path('image/groups-purple.svg');
         $dateSvgPath = public_path('image/date-purple.svg');
         $needSvgPath = public_path('image/needs.svg');
@@ -29,8 +28,6 @@ class createSVGArray
         $partnerSvg = str_replace('<svg', '<svg class="w-9 h-9"', $partnerSvgContents);
         $descriptionSvgContent = file_get_contents($descriptionSvgPath);
         $descriptionSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $descriptionSvgContent);
-        $statuSvgContent = file_get_contents($statuSvgPath);
-        $statuSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $statuSvgContent);
         $particpantSvgContent = file_get_contents($participantsSvgPath);
         $particpantSvg = str_replace('<svg', '<svg class="w-9 h-9 mr-2"', $particpantSvgContent);
         $dateSvgContent = file_get_contents($dateSvgPath);
@@ -44,7 +41,6 @@ class createSVGArray
             'structure' => $structureSvg,
             'partners' => $partnerSvg,
             'description' => $descriptionSvg,
-            'status' => $statuSvg,
             'participants' => $particpantSvg,
             'date' => $dateSvg,
             'needs' => $needSvg,

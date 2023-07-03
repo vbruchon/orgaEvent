@@ -21,11 +21,6 @@ class Event extends Model
         return $this->belongsTo(Structure::class, 'structure_id');
     }
 
-    public function status()
-    {
-        return $this->belongsTo(Status::class, 'status_id');
-    }
-
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }

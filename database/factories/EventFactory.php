@@ -31,7 +31,6 @@ class EventFactory extends Factory
             'hours' => $this->faker->time(),
             'organizer_needs' => $this->faker->text,
             'structure_id' => Structure::pluck('id')->random(),
-            'status_id' => Status::pluck('id')->random(),
             'number_of_participants_id' => NumberOfParticipants::pluck('id')->random(),
             'user_id' => User::pluck('id')->random(),
         ];

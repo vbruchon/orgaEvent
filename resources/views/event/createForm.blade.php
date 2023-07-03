@@ -7,7 +7,7 @@
     <main class="w-full">
 
         <div class="mt-6 ">
-            <x-custom-button route="userEvent.all" content="Retourner aux événements"/>
+            <x-custom-button route="userEvent.all" content="Retourner aux événements" />
         </div>
 
         <form action="{{ route('userEvent.add') }}" method="POST" class="bg-gray-100 block p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
@@ -46,19 +46,6 @@
                 </div>
 
                 <div class="w-full flex place-content-between mb-4">
-                    <div class="flex flex-col w-2/5 mr-8">
-                        <label class="mb-3 text-xl" for="status_id">Etat d'avancement <span class="text-red-600">*</span> : </label>
-                        <select class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2.5 @error('status') is-invalid @enderror" name="status_id" id="">
-                            <option value="" disabled selected hidden>Choisissez un status</option>
-                            @if($status->count() > 0)
-                            @foreach($status as $state)
-                            <option value="{{ $state->id }}" @if(old('status_id')==$state->id) selected @endif>{{ $state->name }}</option>
-                            @endforeach
-                            @endif
-                        </select>
-                        @error('status')<span class="text-red-600">{{ $message }}</span>@enderror
-
-                    </div>
                     <div class="flex flex-col w-3/5 mr-8 mb-4">
                         <label class="mb-3 text-xl" for="number_of_participants_id">Nombre de personnes présentes estimé <span class="text-red-600">*</span> :</label>
                         <select class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2.5 @error('nbre_people') is-invalid @enderror" name="number_of_participants_id">
@@ -80,18 +67,7 @@
                     <label class="mb-3 text-xl" for="location">Lieu de l'événement :</label>
                     <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 mb-6" name="location" type="text" value="{{ old('location') }}" placeholder="Veuillez renseigner le lieu de l'événement">
                 </div>
-                <div id="date" class="w-full flex mb-6">
-                    <div class="w-2/5">
-                        <label class="mb-3 text-xl" for="date-start">Date de début de l'événement <span class="text-red-600">*</span> :</label>
-                        <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 w-2/5 @error('date_start') is-invalid @enderror" name="date_start" type="date" value="{{ old('date_start') }}">
-                    </div>
-                    <div class="ml-12 w-2/5">
-                        <label class="mb-3 text-xl" for="date-end">Date de fin de l'événement :</label>
-                        <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 w-2/5 @error('date_end') is-invalid @enderror" name="date_end" type="date" value="{{ old('date_end') }}">
-                    </div>
-                </div>
-                @error('date_start')<span class="text-red-600">{{ $message }}</span>@enderror
-                @error('date_end')<span class="text-red-600">{{ $message }}</span>@enderror
+
                 <div class="w-2/5 flex place-content-between mb-4">
                     <label class="mb-3 text-xl" for="is_Fix">Les dates sont <span class="text-red-600">*</span> :</label>
                     <span class="mb-3 text-xl">Fixe :</span>
@@ -102,8 +78,28 @@
                     <input class="accent-custom-light-purple @error('is_not_fix') is-invalid @enderror" name="is_not_fix" type="checkbox" id="no-fix" value="{{ old('is_not_fix') }}">
                     @error('is_not_fix')<span class="text-red-600">{{ $message }}</span>@enderror
                 </div>
-                <div class="flex flex-col w-2/5 mr-8">
 
+                <div id="is_fix">
+                    <p>Veuillez sélectionner la date de début et la date de fin de l'événement.</p>
+                </div>
+                <div id="is_not_fix">
+                    <p>Veuillez indiquer la période durant laquelle l'événement se déroulera.</p>
+                </div>
+
+                <div id="date" class="w-full flex mb-6">
+                    <div class="w-2/5">
+                        <label class="mb-3 text-xl" for="date-start">Début :<span class="text-red-600">*</span> :</label>
+                        <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 w-2/5 @error('date_start') is-invalid @enderror" name="date_start" type="date" value="{{ old('date_start') }}">
+                    </div>
+                    <div class="ml-12 w-2/5">
+                        <label class="mb-3 text-xl" for="date-end">Fin :</label>
+                        <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 w-2/5 @error('date_end') is-invalid @enderror" name="date_end" type="date" value="{{ old('date_end') }}">
+                    </div>
+                </div>
+                @error('date_start')<span class="text-red-600">{{ $message }}</span>@enderror
+                @error('date_end')<span class="text-red-600">{{ $message }}</span>@enderror
+
+                <div class="flex flex-col w-2/5 mr-8">
                     <label class="mb-3 text-xl">Heure de l'événement :</label>
                     <input class="mb-6 h-8 border-2 border-grey-300 @error('hours_start') is-invalid @enderror" name="hours" type="text" value="{{ old('hours') }}" placeholder="Veuillez respecter se format ( 18:00 - 22:00 )">
                     @error('hours_start')<span class=" text-red-600">{{ $message }}</span>@enderror
@@ -114,7 +110,7 @@
                 <label class="mb-3 text-xl" for="organizer_needs">Besoin de l'organisateur</label>
                 <textarea class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 w-full" id="" name="organizer_needs" cols="10" rows="5" placeholder="Si vous avez des besoins spécifique veuillez les saisir ici...">{{ old('needs_organizer') }}</textarea>
             </section>
-            <x-submitInput label="Publier l'événement"/>
+            <x-submitInput label="Publier l'événement" />
 
         </form>
 
@@ -138,6 +134,26 @@
                 previsionnelCheckbox.checked = true;
             }
         });
+        // Récupérer les références des éléments HTML
+        var fixCheckbox = document.getElementById('fix');
+        var NotFixCheckbox = document.getElementById('no-fix');
+        var isFixDiv = document.getElementById('is_fix');
+        var isNotFixDiv = document.getElementById('is_not_fix');
+
+        // Fonction pour afficher/masquer les div en fonction de l'état de la case à cocher
+        function toggleDivVisibility() {
+            if (fixCheckbox.checked) {
+                isFixDiv.style.display = 'block';
+                isNotFixDiv.style.display = 'none';
+            } else {
+                isFixDiv.style.display = 'none';
+                isNotFixDiv.style.display = 'block';
+            }
+        }
+
+        // Appeler la fonction lors du chargement de la page et lorsque la case à cocher est modifiée
+        window.addEventListener('load', toggleDivVisibility);
+        fixCheckbox.addEventListener('change', toggleDivVisibility);
     </script>
 </x-app-layout>
 

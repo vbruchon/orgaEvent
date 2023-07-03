@@ -5,17 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\NumberOfParticipants;
-use App\Models\Status;
 use App\Models\Structure;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use Carbon\Carbon;
-use Spatie\IcalendarGenerator\Components\Calendar;
-use Spatie\IcalendarGenerator\Components\Event as IcalendarEvent;
 use App\Services\EventExportFileService;
 use App\Services\CreateSVGArray;
 use App\Services\DateConversionService;
-
 
 
 class EventController extends Controller
@@ -30,7 +24,6 @@ class EventController extends Controller
             'partners' => ['required', 'string'],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['string'],
-            'status_id' => ['required', 'integer', 'max:50', 'exists:statuses,id'],
             'number_of_participants_id' => ['required', 'string'],
             'location' => ['nullable', 'string'],
             'date_start' => ['required', 'date'],
@@ -68,10 +61,9 @@ class EventController extends Controller
      */
     public function index(DateConversionService $dateConversion, CreateSVGArray $svg)
     {
-        $events = Event::with('structure', 'status', 'number_of_participants')
+        $events = Event::with('structure', 'number_of_participants')
             ->where('date_start', '>=', '2023-06-30 10:35:45')
             ->has('structure')
-            ->has('status')
             ->has('number_of_participants')
             ->orderBy('date_start', 'asc')
             ->get();
@@ -97,7 +89,6 @@ class EventController extends Controller
         $isAdmin = (new UserController)->checkUserAdmin();
 
         $structures = Structure::get();
-        $status = Status::get();
         $numberOfParticipants = NumberOfParticipants::get();
 
         $svgIcons = $svg->createSvgArray();
@@ -110,7 +101,6 @@ class EventController extends Controller
             'dateEndToDays' => $dateEndToDays,
             'isAdmin' => $isAdmin,
             'structures' => $structures,
-            'status' => $status,
             'numberOfParticipants' => $numberOfParticipants,
             'svg' => $svgIcons
         ]);
@@ -122,10 +112,9 @@ class EventController extends Controller
     public function create()
     {
         $structures = Structure::get();
-        $status = Status::get();
         $numberOfParticipants = NumberOfParticipants::get();
         $user = Auth::user();
-        return view('event.createForm', ['structures' => $structures, 'status' => $status, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
+        return view('event.createForm', ['structures' => $structures, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
     }
 
     /**
@@ -150,11 +139,10 @@ class EventController extends Controller
     public function edit(Event $event, Structure $structures)
     {
         $structures = Structure::get();
-        $status = Status::get();
         $numberOfParticipants = NumberOfParticipants::get();
         $user = Auth::user();
 
-        return view('event.editForm', ['event' => $event, 'structures' => $structures, 'status' => $status, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
+        return view('event.editForm', ['event' => $event, 'structures' => $structures, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
     }
 
     /**
@@ -184,11 +172,11 @@ class EventController extends Controller
 
 
 
-    public function userContribution()
+    public function userContribution(CreateSVGArray $svg)
     {
         $user = Auth::user();
         $events = Event::where('user_id', '=', $user->id)->get();
-        $svgIcons = $this->createSvgArray();
+        $svgIcons = $svg->createSvgArray();
         $isAdmin = (new UserController)->checkUserAdmin();
 
         return view('event.list', ['events' => $events, 'svg' => $svgIcons, 'isAdmin' => $isAdmin]);
@@ -198,10 +186,8 @@ class EventController extends Controller
     {
         $isAdmin = (new UserController)->checkUserAdmin();
         $selectedStructure = $request->input('structure');
-        $selectedStatus = $request->input('status');
         $selectedParticipant = $request->input('number_of_participants');
         $structures = Structure::get();
-        $status = Status::get();
         $numberOfParticipants = NumberOfParticipants::get();
 
         $query = $this->applyFilters($request);
@@ -214,10 +200,8 @@ class EventController extends Controller
                 'events' => $events,
                 'isAdmin' => $isAdmin,
                 'structures' => $structures,
-                'status' => $status,
                 'numberOfParticipants' => $numberOfParticipants,
                 'selectedStructure' => $selectedStructure,
-                'selectedStatus' => $selectedStatus,
                 'selectedParticipant' => $selectedParticipant,
             ]);
         } else {
@@ -246,10 +230,8 @@ class EventController extends Controller
                 'dateEndToDays' => $dateEndToDays,
                 'isAdmin' => $isAdmin,
                 'structures' => $structures,
-                'status' => $status,
                 'numberOfParticipants' => $numberOfParticipants,
                 'selectedStructure' => $selectedStructure,
-                'selectedStatus' => $selectedStatus,
                 'selectedParticipant' => $selectedParticipant,
                 'svg' => $svgIcons
             ]);
@@ -266,15 +248,6 @@ class EventController extends Controller
 
             if ($structure) {
                 $query->where('structure_id', $structure->id);
-            }
-        }
-
-        if ($request->filled('status')) {
-            $statusName = $request->input('status');
-            $status = Status::where('name', $statusName)->first();
-
-            if ($status) {
-                $query->where('status_id', $status->id);
             }
         }
 

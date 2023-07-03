@@ -14,14 +14,14 @@
     @endif
     @if (Request::path() === 'dashboard/events')
     <div class="mt-6 ml-4">
-        <x-custom-button route="userEvent.my" content="Mes contributions" />
+        <x-custom-button route="userEvent.my" content="Mes événements" />
         <x-custom-button route="userEvent.create" content="Ajouter un nouvel événement" />
     </div>
     <div class="w-full sticky z-50 top-20 opacity-100 mb-4 ml-4">
-        @if(isset($selectedStructure) || isset($selectedStatus) || isset($selectedParticipants))
-        <x-filterbar :structures="$structures" :selectedStructure="isset($selectedStructure) ? $selectedStructure : ''" :status="$status" :selectedStatus="isset($selectedStatus) ? $selectedStatus : ''" :numberOfParticipants="$numberOfParticipants" :selectedParticipant="isset($selectedParticipant) ? $selectedParticipant : ''" :route="'userEvent.filter'" />
+        @if(isset($selectedStructure) || isset($selectedParticipants))
+        <x-filterbar :structures="$structures" :selectedStructure="isset($selectedStructure) ? $selectedStructure : ''" :numberOfParticipants="$numberOfParticipants" :selectedParticipant="isset($selectedParticipant) ? $selectedParticipant : ''" :route="'userEvent.filter'" />
         @else
-        <x-filterbar :structures="$structures" :status="$status" :numberOfParticipants="$numberOfParticipants" route="userEvent.filter" />
+        <x-filterbar :structures="$structures" :numberOfParticipants="$numberOfParticipants" route="userEvent.filter" />
         @endif
     </div>
     @else
@@ -69,12 +69,7 @@
                         <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->description }}</p>
                     </div>
                     @endif
-                    @if ($event->status->name)
-                    <div class="flex mb-5 items-center">
-                        {!! $svg['status'] !!}
-                        <p class="p-2 mr-12 text-lg text-custom-blue font-semibold">{{ $event->status->name }}</p>
-                    </div>
-                    @endif
+                    
                     @if ($event->number_of_participants->name)
                     <div class="flex mb-5 items-center">
                         {!! $svg['participants'] !!}
@@ -83,14 +78,15 @@
                     @endif
 
                     @if($event->date_start)
-                    <div class="flex mb-5  items-center">
+                    <div class="flex mb-5 items-center">
                         {!! $svg['date'] !!}
-                        <p class="p-2 text-lg text-custom-blue font-semibold">{{$event->date_start}}</p>
+                        <p class="p-2 text-lg text-custom-blue font-semibold">{{ \Carbon\Carbon::parse($event->date_start)->translatedFormat('d F Y') }}</p>
                         @if($event->date_end !== $event->date_start)
-                        <p class="p-2 text-lg text-custom-blue font-semibold">{{$event->date_end}}</p>
+                        <p class="p-2 text-lg text-custom-blue font-semibold">{{ \Carbon\Carbon::parse($event->date_end)->translatedFormat('d F Y') }}</p>
                         @endif
-                        <p class="p-2 text-lg text-custom-blue font-semibold">{{$event->hours}}</p>
+                        <p class="p-2 text-lg text-custom-blue font-semibold">{{ $event->hours }}</p>
                     </div>
+
                     @endif
                     @if($event->organizer_needs)
                     <div class="flex mb-5  items-center">

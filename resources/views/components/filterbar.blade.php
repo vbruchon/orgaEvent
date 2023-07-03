@@ -1,6 +1,6 @@
 <!-- resources/views/components/filerbar.blade.php -->
 
-@props(['structures', 'status', 'numberOfParticipants', 'selectedStructure', 'selectedStatus', 'selectedParticipant', 'route'])
+@props(['structures', 'numberOfParticipants', 'selectedStructure', 'selectedParticipant', 'route'])
 
 @php
 $selectOptions = [
@@ -8,11 +8,6 @@ $selectOptions = [
 'label' => 'Structure',
 'options' => $structures,
 'selected' => $selectedStructure ?? "",
-],
-'status' => [
-'label' => 'Etat d\'avancement',
-'options' => $status,
-'selected' => $selectedStatus ?? "",
 ],
 'participants' => [
 'label' => 'Nombre de participants',

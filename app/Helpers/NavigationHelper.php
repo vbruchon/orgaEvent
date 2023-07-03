@@ -51,18 +51,7 @@ class NavigationHelper
                         </g>
                     </svg>'
                 ];
-                $links[] = [
-                    'url' => route('admin.status.list'),
-                    'label' => 'Status',
-                    'svg' => '<svg fill="#f6f5f4" class="w-7" version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" stroke="#f6f5f4">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0" />
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
-                    <g id="SVGRepo_iconCarrier">
-                        <path d="M28,12H14H4c-2.2,0-4,1.8-4,4s1.8,4,4,4h10h14c2.2,0,4-1.8,4-4S30.2,12,28,12z M4,18c-1.1,0-2-0.9-2-2s0.9-2,2-2h10 c1.1,0,2,0.9,2,2s-0.9,2-2,2H4z" />
-                    </g>
-
-                </svg>'
-                ];
+                
                 $links[] = [
                     'url' => route('admin.numberOfParticipants.list'),
                     'label' => 'Nombre de participants',
@@ -99,7 +88,7 @@ class NavigationHelper
             }
             $links[] = [
                 'url' => route('profile.edit'),
-                'label' => 'Mon profile',
+                'label' => 'Mon profil',
                 'svg' => '<svg class="w-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0" />
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
