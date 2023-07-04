@@ -21,11 +21,18 @@ class Event extends Model
         return $this->belongsTo(Structure::class, 'structure_id');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function number_of_participants(){
+    public function number_of_participants()
+    {
         return $this->belongsTo(NumberOfParticipants::class, 'number_of_participants_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }
