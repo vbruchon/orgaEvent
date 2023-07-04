@@ -22,11 +22,13 @@ return new class extends Migration
             $table->date('date_end')->nullable();
             $table->boolean('is_Fix');
             $table->string('hours')->nullable();
+            $table->string('link')->nullable();
             $table->text('organizer_needs')->nullable();
 
             $table->foreignId('structure_id');
             $table->foreignId('number_of_participants_id', 100);
             $table->foreignId('user_id');
+            $table->foreignId('accessType_id')->nullable();
         });
     }
 

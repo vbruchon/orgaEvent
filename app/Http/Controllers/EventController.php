@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\EventExportFileService;
 use App\Services\CreateSVGArray;
 use App\Services\DateConversionService;
+use Carbon\Carbon;
+
 
 
 class EventController extends Controller
@@ -61,10 +63,11 @@ class EventController extends Controller
      */
     public function index(DateConversionService $dateConversion, CreateSVGArray $svg)
     {
-        $events = Event::with('structure', 'number_of_participants')
+        $events = Event::with('structure', 'number_of_participants', 'accessType')
             ->where('date_start', '>=', '2023-06-30 10:35:45')
             ->has('structure')
             ->has('number_of_participants')
+            ->has('accessType')
             ->orderBy('date_start', 'asc')
             ->get();
 
@@ -182,7 +185,7 @@ class EventController extends Controller
         return view('event.list', ['events' => $events, 'svg' => $svgIcons, 'isAdmin' => $isAdmin]);
     }
 
-    public function filteredEvents(Request $request)
+    public function filteredEvents(Request $request, DateConversionService $dateConversion, CreateSVGArray $svg)
     {
         $isAdmin = (new UserController)->checkUserAdmin();
         $selectedStructure = $request->input('structure');
@@ -192,7 +195,7 @@ class EventController extends Controller
 
         $query = $this->applyFilters($request);
 
-        $events = $query->orderBy('date_start')->where('date_end', '>', now())->get();
+        $events = $query->orderBy('date_start')->get();
 
 
         if (sizeof($events) < 1) {
@@ -208,19 +211,19 @@ class EventController extends Controller
             foreach ($events as $event) {
                 $key = $event->id;
 
-                $convertDateStartToString = $this->convertDateToString($event->date_start);
+                $convertDateStartToString = $dateConversion->convertDateToString($event->date_start);
                 $dateStartToString[$key] = $convertDateStartToString;
 
-                $convertDateStartToDays = $this->convertDateToDays($event->date_start);
+                $convertDateStartToDays = $dateConversion->convertDateToDays($event->date_start);
                 $dateStartToDays[$key] = $convertDateStartToDays;
 
                 if (isset($event->date_end)) {
-                    $convertDateEndToDays = $this->convertDateToDays($event->date_end);
+                    $convertDateEndToDays = $dateConversion->convertDateToDays($event->date_end);
                     $dateEndToDays[$key] = $convertDateEndToDays;
                 }
             }
-            $svgIcons = $this->createSvgArray();
 
+            $svgIcons = $svg->createSvgArray();
 
             // Sinon, retourne la vue partielle des événements filtrés
             return view('event.list', [
@@ -244,11 +247,9 @@ class EventController extends Controller
 
         if ($request->filled('structure')) {
             $structureName = $request->input('structure');
-            $structure = Structure::where('name', $structureName)->first();
-
-            if ($structure) {
-                $query->where('structure_id', $structure->id);
-            }
+            $query->whereHas('structure', function ($query) use ($structureName) {
+                $query->where('name', $structureName);
+            });
         }
 
         if ($request->filled('number_of_participants')) {
@@ -262,8 +263,10 @@ class EventController extends Controller
 
         if ($request->filled('date_start')) {
             $dateStartLabel = $request->input('date_start');
-            $query->whereDate('date_start', '>', $dateStartLabel);
+            $dateStart = Carbon::createFromFormat('Y-m-d', $dateStartLabel)->startOfDay();
+            $query->whereDate('date_start', $dateStart);
         }
+
 
 
         if ($request->filled('date_end')) {

@@ -57,7 +57,12 @@
                     @if($event->is_Fix === 0)
                     <img src="{{asset('image/badge.png')}}" alt="" class="w-1/6 absolute top-8 right-10">
                     @endif
-                    <p class="p-8 font-semibold text-3xl text-custom-blue">{{$event->name}}</p>
+                    <p class="p-4 font-semibold text-3xl text-custom-blue">{{$event->name}}</p>
+                    <div class="my-6 flex space-x-4">
+                        @foreach ($event->tags as $tag)
+                        <p class="font-bold bg-custom-blue p-2 rounded-full text-white">#{{ $tag->name }}</p>
+                        @endforeach
+                    </div>
                     <div class="flex mb-5 items-center">
                         @if ($event->structure->name)
                         <div class="flex mb-5 items-center">
@@ -130,7 +135,11 @@
                         </div>
                     </div>
                     @endif
+
                     <p class="italic">Événement créé par <span>{{ $event->user->name }}</span></p>
+                    <p class="italic">Cette événement est <span>{{ $event->accessType->name }}</span></p>
+
+
                 </div>
                 @endforeach
             </div>
