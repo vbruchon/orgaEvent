@@ -4,7 +4,6 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -15,8 +14,8 @@
                     <h2 class="text-xl mb-6">Bienvenue sur votre tableau de bord Archimède !</h2>
                     <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
                         <x-custom-button route="userEvent.all" content="Consulter les événements" />
-                        <x-custom-button route="userEvent.create" content="Ajouter un événements" />
-                        <x-custom-button route="userEvent.my" content="Voir mes contributions" />
+                        <x-custom-button route="userEvent.create" content="Ajouter un événement" />
+                        <x-custom-button route="userEvent.my" content="Voir mes événements" />
                     </div>
 
 
@@ -43,7 +42,7 @@
                         </div>
                         <div class="flex items-center p-8 bg-white shadow-lg shadow-gray-350 rounded-lg">
                             <div class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-custom-blue rounded-full mr-6">
-                            {!! $svg['user'] !!}
+                                {!! $svg['user'] !!}
 
                             </div>
                             <div>
@@ -58,7 +57,7 @@
                     <section class="grid gap-6">
                         <div class="flex items-center p-8 bg-white shadow-lg shadow-gray-350 rounded-lg">
                             <div class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-custom-blue rounded-full mr-6">
-                            {!! $svg['event'] !!}
+                                {!! $svg['event'] !!}
                             </div>
                             <div>
                                 <span class="block text-2xl font-bold">Dernière contribution :</span>
@@ -71,7 +70,7 @@
                         </div>
                         <div class="flex items-center p-8 bg-white shadow-lg shadow-gray-350 rounded-lg">
                             <div class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-custom-blue rounded-full mr-6">
-                            {!! $svg['event'] !!}
+                                {!! $svg['event'] !!}
                             </div>
                             <div class="w-full">
                                 <span class="block text-2xl font-bold">Prochains événements dans les 30 jours :</span>
