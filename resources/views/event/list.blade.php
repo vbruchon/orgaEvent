@@ -47,10 +47,16 @@
                 $dateStart = $dateStartToString[$event->id];
                 @endphp
                 @endif
-                @if($event->is_Fix === 0)
-                <img src="{{asset('image/badge.png')}}" alt="" class="w-1/6 absolute top-8 right-10">
-                @endif
+
+
                 <div class="p-8 border-2 w-80 mt-16 mb-6 mx-auto">
+                    @isset($dateStart)
+                    <p class="absolute top-0 left-0 p-2 text-custom-blue font-medium">{{ $dateStart }}</p>
+                    <!-- <hr class="absolute top-8 left-16 p-2 w-1/15 border-custom-blue"> -->
+                    @endisset
+                    @if($event->is_Fix === 0)
+                    <img src="{{asset('image/badge.png')}}" alt="" class="w-1/6 absolute top-8 right-10">
+                    @endif
                     <p class="p-8 font-semibold text-3xl text-custom-blue">{{$event->name}}</p>
                     <div class="flex mb-5 items-center">
                         @if ($event->structure->name)
@@ -84,7 +90,7 @@
                     <div class="flex mb-5 items-center">
                         {!! $svg['date'] !!}
                         <p class="p-2 text-lg text-custom-blue font-semibold">{{ \Carbon\Carbon::parse($event->date_start)->translatedFormat('d F Y') }}</p>
-                        @if($event->date_end !== $event->date_start)
+                        @if($event->date_end !== null && $event->date_end !== $event->date_start)
                         <p class="p-2 text-lg text-custom-blue font-semibold">{{ \Carbon\Carbon::parse($event->date_end)->translatedFormat('d F Y') }}</p>
                         @endif
                         <p class="p-2 text-lg text-custom-blue font-semibold">{{ $event->hours }}</p>
@@ -102,8 +108,7 @@
                         <a href="{{ route('userEvent.edit', $event) }}" class="transition duration-300 transform hover:scale-110 bg-custom-blue p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold  ">
                             Modifier
                         </a>
-                        <form id="deleteForm" method="post" action="{{ route('userEvent.destroy', $event->id) }}">
-                            @csrf
+                        <form id="deleteForm-{{ $event->id }}" method="post" action="{{ route('userEvent.destroy', $event->id) }}"> @csrf
                             @method('delete')
                             <button type="button" class="transition duration-300 transform hover:scale-110 bg-red-600 p-2 pl-3 pr-3 text-white hover:shadow-lg text-m font-semibold delete-button" data-target="#confirmDeleteModal">
                                 Supprimer
@@ -111,7 +116,7 @@
                         </form>
 
                         <!-- Modal -->
-                        <div id="confirmDeleteModal" class="hidden fixed inset-0 flex items-center justify-center z-50">
+                        <div id="confirmDeleteModal-{{ $event->id }}" class="hidden fixed inset-0 flex items-center justify-center z-50">
                             <div class="bg-custom-purple rounded-lg w-1/2 p-4">
                                 <div class="p-6">
                                     <h3 class="text-2xl text-white font-bold mb-6">Confirmation de suppression</h3>
@@ -123,16 +128,10 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     @endif
+                    <p class="italic">Événement créé par <span>{{ $event->user->name }}</span></p>
                 </div>
-
-                @isset($dateStart)
-                <p class="absolute top-0 left-0 p-2 text-custom-blue font-medium">{{ $dateStart }}</p>
-                <hr class="absolute top-10 left-10 p-2 w-1/15 border-custom-blue">
-                @endisset
                 @endforeach
             </div>
             @endif
