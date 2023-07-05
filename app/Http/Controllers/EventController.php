@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccessType;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\NumberOfParticipants;
 use App\Models\Structure;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 use App\Services\EventExportFileService;
 use App\Services\CreateSVGArray;
@@ -27,6 +29,7 @@ class EventController extends Controller
             'name' => ['required', 'string', 'max:150'],
             'description' => ['string'],
             'number_of_participants_id' => ['required', 'string'],
+            'accessType_id' => ['required'],
             'location' => ['nullable', 'string'],
             'date_start' => ['required', 'date'],
             'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
@@ -117,7 +120,9 @@ class EventController extends Controller
         $structures = Structure::get();
         $numberOfParticipants = NumberOfParticipants::get();
         $user = Auth::user();
-        return view('event.createForm', ['structures' => $structures, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
+        $accessType = AccessType::get();
+        $tags = Tag::get();
+        return view('event.createForm', ['structures' => $structures, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user, 'accessType' => $accessType, 'tags' => $tags]);
     }
 
     /**
@@ -125,16 +130,24 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        // Récupérer les IDs des tags sélectionnés depuis la requête
+        $tagIds = $request->input('tags');
+
         $validated = $this->validateEvent($request);
 
         $event = new Event();
         $this->fillEventFields($event, $validated);
         $event->is_Fix = $request->has('is_Fix');
         $event->user_id = Auth::user()->id;
+
         $event->save();
+
+        // Associer les tags à l'événement créé
+        $event->tags()->attach($tagIds);
 
         return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien été créé');
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -144,8 +157,10 @@ class EventController extends Controller
         $structures = Structure::get();
         $numberOfParticipants = NumberOfParticipants::get();
         $user = Auth::user();
+        $accessType = AccessType::get();
+        $tags = Tag::get();
 
-        return view('event.editForm', ['event' => $event, 'structures' => $structures, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user]);
+        return view('event.editForm', ['event' => $event, 'structures' => $structures, 'numberOfParticipants' => $numberOfParticipants, 'user' => $user, 'accessType' => $accessType, 'tags' => $tags]);
     }
 
     /**

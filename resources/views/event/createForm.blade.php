@@ -10,6 +10,15 @@
             <x-custom-button route="userEvent.all" content="Retourner aux événements" />
         </div>
 
+        @if ($errors->any())
+        <div class="bg-red-400 p-6 text-center m-6 rounded shadow border border-red-800">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <form action="{{ route('userEvent.add') }}" method="POST" class="bg-gray-100 block p-8 rounded-2xl w-3/4 justify-center mx-auto mt-8 mb-6">
             @csrf
             <section class="relative border-2 border-custom-light-purple rounded-lg p-16 mb-12 ">
@@ -59,6 +68,27 @@
                         </select>
                         @error('nbre_people')<span class="text-red-600">{{ $message }}</span>@enderror
                     </div>
+                </div>
+                <div class="flex flex-col w-2/5 mr-8">
+                    <label class="mb-3 text-xl" for="accessType_id">Type d'événement <span class="text-red-600">*</span> :</label>
+                    <select name="accessType_id" id="" class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2.5 @error('accessType_id') is-invalid @enderror">
+                        <option value="" disabled selected hidden>Choisissez un type</option>
+                        @if($accessType->count() > 0)
+                        @foreach($accessType as $type)
+                        <option value="{{ $type->id }}" @if(old('accessType_id')==$type->id) selected @endif>{{ $type->name }}</option> @endforeach
+                        @endif
+                    </select>
+                    @error('accessType_id')<span class="text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="flex flex-col w-2/5 mr-8">
+                    <label class="mb-3 text-xl">Tags <span class="text-red-600">*</span> :</label>
+                    @foreach($tags as $tag)
+                    <label>
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2.5 @error('tags') is-invalid @enderror" @if(is_array(old('tags')) && in_array($tag->id, old('tags'))) checked @endif>
+                        {{ $tag->name }}
+                    </label>
+                    @endforeach
+                    @error('tags')<span class="text-red-600">{{ $message }}</span>@enderror
                 </div>
             </section>
             <section class="relative border-2 border-custom-light-purple rounded-lg p-16 mb-12 ">
@@ -115,57 +145,8 @@
         </form>
 
     </main>
-    <script>
-        var previsionnelCheckbox = document.getElementById("no-fix");
-        var fixCheckbox = document.getElementById("fix");
-
-        previsionnelCheckbox.addEventListener("click", function() {
-            if (previsionnelCheckbox.checked) {
-                fixCheckbox.checked = false;
-            } else {
-                fixCheckbox.checked = true;
-            }
-        });
-
-        fixCheckbox.addEventListener("click", function() {
-            if (previsionnelCheckbox.checked) {
-                previsionnelCheckbox.checked = false;
-            } else {
-                previsionnelCheckbox.checked = true;
-            }
-        });
-        // Récupérer les références des éléments HTML
-        var fixCheckbox = document.getElementById('fix');
-        var notFixCheckbox = document.getElementById('no-fix');
-        var isFixDiv = document.getElementById('is_fix');
-        var isNotFixDiv = document.getElementById('is_not_fix');
-
-        // Fonction pour afficher/masquer les div en fonction de l'état des cases à cocher
-        function toggleDivVisibility() {
-            if (fixCheckbox.checked) {
-                isFixDiv.style.display = 'block';
-                isNotFixDiv.style.display = 'none';
-            } else if (notFixCheckbox.checked) {
-                isFixDiv.style.display = 'none';
-                isNotFixDiv.style.display = 'block';
-            } else {
-                isFixDiv.style.display = 'none';
-                isNotFixDiv.style.display = 'none';
-            }
-        }
-
-        // Appeler la fonction pour définir l'état initial des div
-        toggleDivVisibility();
-
-        // Ajouter des écouteurs d'événements pour les clics sur les cases à cocher
-        fixCheckbox.addEventListener('click', toggleDivVisibility);
-        notFixCheckbox.addEventListener('click', toggleDivVisibility);
-/* 
-
-        // Appeler la fonction lors du chargement de la page et lorsque la case à cocher est modifiée
-        window.addEventListener('load', toggleDivVisibility);
-        fixCheckbox.addEventListener('change', toggleDivVisibility); */
-    </script>
+    <script src="{{ asset('js/form.js') }}"></script>
+ 
 </x-app-layout>
 
 <!--     <script src="https://cdn.tailwindcss.com"></script>

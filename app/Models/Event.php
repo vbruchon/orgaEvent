@@ -35,4 +35,9 @@ class Event extends Model
     {
         return $this->belongsToMany(Tag::class);
     }
+
+    public function accessType()
+    {
+        return $this->belongsTo(AccessType::class, 'accessType_id');
+    }
 }
